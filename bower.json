@@ -1,0 +1,31 @@
+{
+  "name": "planning-poker",
+  "version": "0.0.0",
+  "description": "A tool for agile planning",
+  "moduleType": [
+    "es6",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "Agile",
+    "Poker",
+    "Scrum",
+    "Estimation"
+  ],
+  "authors": [
+    "Mike Romano"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "react": "~0.12.0"
+  }
+}
