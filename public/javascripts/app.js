@@ -1,3 +1,3 @@
-var hello = require('./myscript');
+var hello = require('./myscript.jsx');
 
 hello();

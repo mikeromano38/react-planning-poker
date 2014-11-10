@@ -1,13 +1,14 @@
 var gulp = require('gulp');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
+var reactify = require('reactify');
 
 gulp.task('default', function() {
 	// place code for your default task here
 });
 
 gulp.task('watchBrowserify', function(){
-	var watcher = gulp.watch('./public/javascripts/**/*.js', ['browserify']);
+	var watcher = gulp.watch(['./public/javascripts/**/*.js*', '!./public/javascripts/app-bundled.map.json', '!./public/javascripts/app-bundled.js'], ['browserify']);
 
 	watcher.on('change', function( evt ) {
 		console.log('File ' + evt.path + ' was ' + evt.type + ' browserifying...');
@@ -15,7 +16,15 @@ gulp.task('watchBrowserify', function(){
 });
 
 gulp.task('browserify', function(){
-	browserify( './public/javascripts/app.js')
+	browserify({
+		entries: './public/javascripts/app.js',
+		transform: [reactify],
+		debug: true
+	})
+		//.plugin('minifyify', {
+		//	map: '/javascripts/app-bundled.map.json',
+		//	output: './public/javascripts/app-bundled.map.json'
+		//})
 		.bundle()
 		.pipe(source('app-bundled.js'))
 		.pipe(gulp.dest('./public/javascripts/'));
