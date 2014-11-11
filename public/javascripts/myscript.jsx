@@ -1,15 +1,30 @@
 var React = require('react');
 
-module.exports = function(){
-	var greeting = 'Hello There, World!';
-
-	var Comp = React.createClass({
-		render: function(){
-			return (
-				<h1>{greeting}</h1>
-				)
+var RoomList = React.createClass({
+	getInitialState: function(){
+		return {
+			rooms: []
 		}
-	});
+	},
+	render: function(){
+		return (
+			<ul>
+				{this.state.rooms.map(function(room) {
+					return <RoomListItem roomName={room} />;
+				})}
+			</ul>
+			)
+	}
+});
 
-	React.render( <Comp />, document.getElementById('greeting') );
+var RoomListItem = React.createClass({
+	render: function(){
+		return (
+			<li>{this.props.roomName}</li>
+		)
+	}
+});
+
+module.exports = function(){
+	return React.render( <RoomList />, document.getElementById('greeting') );
 };
