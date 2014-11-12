@@ -1,14 +1,10 @@
-var roomsComponent = require('./myscript.jsx');
+var roomsComponent = require('./components/myscript.jsx');
 var rooms = require('./rooms.js');
+var roomsForm = require('./components/rooms-form.jsx');
 
 var connection = rooms.connect();
-var rc = roomsComponent();
-
-//connection.push({ name: 'My roomy room' });
-//connection.push({ name: 'My roomy room2' });
-//connection.push({ name: 'My roomy room3' });
-//connection.push({ name: 'My roomy room4' });
-//connection.push({ name: 'My roomy room5' });
+var rc = roomsComponent( document.getElementById( 'rooms' ) );
+roomsForm( document.getElementById( 'rooms-form' ) );
 
 var roomData = [];
 
@@ -16,4 +12,6 @@ connection.on('child_added', function( snapshot ){
 	roomData.push( snapshot.val() );
 	rc.setState({rooms: roomData});
 });
+
+
 
