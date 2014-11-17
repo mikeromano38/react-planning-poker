@@ -1,17 +1,10 @@
-//var RoomsActions = require('../actions/rooms-actions');
-var RoomsService = require('../services/rooms-service');
+var RoomsServerActions = require('../actions/rooms-server-actions');
 var React = require('react');
-
-var roomsService = null;
 
 var RoomsForm = React.createClass({
 
 	getInitialState: function(){
 		return { name: null }
-	},
-
-	componentDidMount: function(){
-		roomsService = RoomsService.connect();
 	},
 
 	handleSubmit: function( evt ){
@@ -21,7 +14,7 @@ var RoomsForm = React.createClass({
 			return false;
 		}
 
-		roomsService.push( this.state );
+		RoomsServerActions.createRoom( this.state );
 		this.setState({ name: '' });
 	},
 

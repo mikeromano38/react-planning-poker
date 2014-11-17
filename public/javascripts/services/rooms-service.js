@@ -1,27 +1,26 @@
 var RoomsActions = require('../actions/rooms-actions');
+var connection = null;
 
-var RoomsService = (function(){
+var RoomsService = function(){
 
-	var connection = null;
+	if (!connection){
+		connection = new Firebase('https://romanocreative.firebaseio.com/rooms');
 
-	function connect(){
-		if (!connection){
-			connection = new Firebase('https://romanocreative.firebaseio.com/rooms');
+		connection.on('child_added', function( snapshot ){
+			RoomsActions.roomLoaded( snapshot.val() );
+		}, function( err ){
+			RoomsActions.roomLoadedFailure( err );
+		});
+	}
 
-			connection.on('child_added', function( snapshot ){
-				RoomsActions.createRoomSuccess( snapshot.val() );
-			}, function( err ){
-				RoomsActions.createRoomFailure( err );
-			});
-		}
-
-		return connection;
+	function create( room ){
+		connection.push( room );
 	}
 
 	return {
-		connect: connect
+		create: create
 	}
 
-})();
+};
 
 module.exports = RoomsService;

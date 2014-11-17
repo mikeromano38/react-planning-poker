@@ -6,7 +6,7 @@ var RoomsList = require('./rooms-list.jsx');
 var PlanningPoker = React.createClass({
 
 	componentDidMount: function(){
-		RoomsService.connect();
+		RoomsService();
 	},
 
 	render: function(){

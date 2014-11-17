@@ -2,20 +2,18 @@ var AppDispatcher = require('../dispatcher/app-dispatcher');
 
 var RoomsActions = {
 
-	//createRoom: function( room ){
-	//	var roomsService = RoomsService.connect();
-	//	roomsService.push( room );
-	//},
-
-	createRoomSuccess: function( room ){
+	roomLoaded: function( room ){
 		AppDispatcher.dispatch({
 			actionType: 'create-room',
 			room: room
 		});
 	},
 
-	createRoomFailure: function(){
-
+	roomLoadedFailure: function( room ){
+		AppDispatcher.dispatch({
+			actionType: 'create-room',
+			room: room
+		});
 	},
 
 	removeRoom: function( room ){
