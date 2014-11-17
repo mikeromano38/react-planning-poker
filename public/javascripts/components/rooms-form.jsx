@@ -1,19 +1,34 @@
-var roomsService = require('../firebase');
+//var RoomsActions = require('../actions/rooms-actions');
+var RoomsService = require('../services/rooms-service');
 var React = require('react');
 
+var roomsService = null;
+
 var RoomsForm = React.createClass({
+
 	getInitialState: function(){
 		return { name: null }
 	},
-	handleSubmit: function( evt ){
-		var connection = roomsService.connect();
-		connection.push( this.state );
-		this.state.name = null;
-		evt.preventDefault();
+
+	componentDidMount: function(){
+		roomsService = RoomsService.connect();
 	},
+
+	handleSubmit: function( evt ){
+		evt.preventDefault();
+
+		if ( !this.state.name ){
+			return false;
+		}
+
+		roomsService.push( this.state );
+		this.setState({ name: '' });
+	},
+
 	handleChangeName: function( evt ){
 		this.setState({ name: evt.currentTarget.value });
 	},
+
 	render: function(){
 		return (
 			<form onSubmit={this.handleSubmit}>
@@ -22,8 +37,7 @@ var RoomsForm = React.createClass({
 			</form>
 		)
 	}
+
 });
 
-module.exports = function( target ){
-	return React.render( <RoomsForm />, target );
-};
+module.exports = RoomsForm;

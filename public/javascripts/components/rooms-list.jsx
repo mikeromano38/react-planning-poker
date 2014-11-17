@@ -1,12 +1,23 @@
 var React = require('react');
 var spinner = require('./spinner');
+var RoomsStore = require('../stores/rooms-store');
 
-var RoomList = React.createClass({
+var RoomsList = React.createClass({
+
 	getInitialState: function(){
 		return {
 			rooms: []
 		}
 	},
+
+	componentDidMount: function(){
+		RoomsStore.on('change', this.onStoreChange );
+	},
+
+	componentWillUnmount: function(){
+		RoomsStore.removeListener('change', this.onStoreChange );
+	},
+
 	render: function(){
 		var loading = null;
 		if ( this.state.rooms.length === 0 ){
@@ -22,7 +33,13 @@ var RoomList = React.createClass({
 				</ul>
 			</div>
 			)
+	},
+
+	onStoreChange: function(){
+		var rooms = RoomsStore.getAllRooms();
+		this.setState({ rooms: rooms });
 	}
+
 });
 
 var RoomListItem = React.createClass({
@@ -42,8 +59,6 @@ var Spinner = React.createClass({
 			<div id="spinner" />
 		)
 	}
-})
+});
 
-module.exports = function( target ){
-	return React.render( <RoomList />, target );
-};
+module.exports = RoomsList;

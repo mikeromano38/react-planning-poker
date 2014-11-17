@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var reactify = require('reactify');
+var uglify = require('gulp-uglify');
 
 gulp.task('default', function() {
 	// place code for your default task here
@@ -17,15 +18,14 @@ gulp.task('watchBrowserify', function(){
 
 gulp.task('browserify', function(){
 	browserify({
-		entries: './public/javascripts/app.js',
+		entries: './public/javascripts/app.jsx',
 		transform: [reactify],
 		debug: true
 	})
-		//.plugin('minifyify', {
-		//	map: '/javascripts/app-bundled.map.json',
-		//	output: './public/javascripts/app-bundled.map.json'
-		//})
 		.bundle()
 		.pipe(source('app-bundled.js'))
+		//.pipe(uglify())
 		.pipe(gulp.dest('./public/javascripts/'));
+
+
 });
