@@ -8,8 +8,13 @@ var addRoom = function( room ){
 	_rooms.push( room );
 };
 
-var removeRoom = function( room ){
-	_rooms.splice( _rooms.indexOf( room ), 1 );
+var removeRoom = function( roomKey ){
+	for( var i = 0, l = _rooms.length; i < l; i++ ){
+		if ( _rooms[ i ].key === roomKey ){
+			_rooms.splice( i, 1 );
+			break;
+		}
+	}
 };
 
 var RoomsStore = merge( EventEmitter.prototype, {
@@ -23,11 +28,12 @@ var RoomsStore = merge( EventEmitter.prototype, {
 
 		switch( action ){
 			case 'create-room':
+				debugger
 				addRoom( payload.room );
 				RoomsStore.emit( 'change' );
 				break;
 			case 'remove-room':
-				removeRoom( payload.room );
+				removeRoom( payload.roomKey );
 				RoomsStore.emit( 'change' );
 				break;
 		}

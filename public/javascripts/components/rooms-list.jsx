@@ -1,6 +1,7 @@
 var React = require('react');
 var spinner = require('./spinner');
 var RoomsStore = require('../stores/rooms-store');
+var RoomsServerActions = require('../actions/rooms-server-actions');
 
 var RoomsList = React.createClass({
 
@@ -28,7 +29,7 @@ var RoomsList = React.createClass({
 				{loading}
 				<ul>
 					{this.state.rooms.map(function(room) {
-						return <RoomListItem roomName={room} />;
+						return <RoomListItem roomName={room.name} roomKey={room.key} key={room.key} />;
 					})}
 				</ul>
 			</div>
@@ -37,6 +38,7 @@ var RoomsList = React.createClass({
 
 	onStoreChange: function(){
 		var rooms = RoomsStore.getAllRooms();
+		debugger
 		this.setState({ rooms: rooms });
 	}
 
@@ -45,8 +47,16 @@ var RoomsList = React.createClass({
 var RoomListItem = React.createClass({
 	render: function(){
 		return (
-			<li>{this.props.roomName}</li>
+			<li>
+				<span>{this.props.roomName}</span>
+				<button onClick={this.handleDelete}>Delete</button>
+			</li>
 		)
+	},
+
+	handleDelete: function(){
+		debugger
+		RoomsServerActions.removeRoom( this.props.roomKey );
 	}
 });
 

@@ -16,10 +16,10 @@ var RoomsActions = {
 		});
 	},
 
-	removeRoom: function( room ){
+	removeRoom: function( roomKey ){
 		AppDispatcher.dispatch({
 			actionType: 'remove-room',
-			room: room
+			roomKey: roomKey
 		});
 	}
 
