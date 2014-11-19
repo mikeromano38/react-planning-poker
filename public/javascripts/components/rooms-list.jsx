@@ -1,6 +1,7 @@
 var React = require('react');
 var spinner = require('./spinner');
 var RoomsStore = require('../stores/rooms-store');
+var ParticipantUtils = require('../utils/participant-utils');
 var RoomsServerActions = require('../actions/rooms-server-actions');
 
 var RoomsList = React.createClass({
@@ -29,7 +30,7 @@ var RoomsList = React.createClass({
 				{loading}
 				<ul>
 					{this.state.rooms.map(function(room) {
-						return <RoomListItem roomName={room.name} roomKey={room.key} key={room.key} />;
+						return <RoomListItem room={room} key={room.key} />;
 					})}
 				</ul>
 			</div>
@@ -38,7 +39,6 @@ var RoomsList = React.createClass({
 
 	onStoreChange: function(){
 		var rooms = RoomsStore.getAllRooms();
-		debugger
 		this.setState({ rooms: rooms });
 	}
 
@@ -46,17 +46,22 @@ var RoomsList = React.createClass({
 
 var RoomListItem = React.createClass({
 	render: function(){
+		var deleteBtn = null;
+
+		if ( this.props.room.owner === ParticipantUtils.generateParticipantId() ){
+			deleteBtn = <button onClick={this.handleDelete}>Delete</button>;
+		}
+
 		return (
 			<li>
-				<span>{this.props.roomName}</span>
-				<button onClick={this.handleDelete}>Delete</button>
+				<span>{this.props.room.name}</span>
+				{deleteBtn}
 			</li>
 		)
 	},
 
 	handleDelete: function(){
-		debugger
-		RoomsServerActions.removeRoom( this.props.roomKey );
+		RoomsServerActions.removeRoom( this.props.room.key );
 	}
 });
 

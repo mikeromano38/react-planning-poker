@@ -8,7 +8,6 @@ var RoomsActions = {
 	},
 
 	removeRoom: function( roomKey ){
-		debugger
 		var roomsService = RoomsService();
 		roomsService.remove( roomKey );
 	}

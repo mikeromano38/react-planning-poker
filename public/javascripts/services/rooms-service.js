@@ -7,7 +7,6 @@ var RoomsService = function(){
 		connection = new Firebase('https://romanocreative.firebaseio.com/rooms');
 
 		connection.on('child_added', function( snapshot ){
-			debugger
 			var room =  snapshot.val();
 			room.key = snapshot.name();
 
@@ -17,7 +16,6 @@ var RoomsService = function(){
 		});
 
 		connection.on('child_removed', function( snapshot ){
-			console.log('child_removed triggered')
 			var key = snapshot.name();
 			RoomsActions.removeRoom( key );
 		}, function( err ){
@@ -30,7 +28,6 @@ var RoomsService = function(){
 	}
 
 	function remove( key ){
-		debugger
 		var removeRef = new Firebase('https://romanocreative.firebaseio.com/rooms/' + key );
 		removeRef.remove();
 	}

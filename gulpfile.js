@@ -22,10 +22,8 @@ gulp.task('browserify', function(){
 		transform: [reactify],
 		debug: true
 	})
-		.bundle()
-		.pipe(source('app-bundled.js'))
-		//.pipe(uglify())
-		.pipe(gulp.dest('./public/javascripts/'));
-
-
+	.bundle()
+	.pipe(source('app-bundled.js'))
+	//.pipe(uglify())
+	.pipe(gulp.dest('./public/javascripts/'));
 });

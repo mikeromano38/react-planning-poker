@@ -28,7 +28,6 @@ var RoomsStore = merge( EventEmitter.prototype, {
 
 		switch( action ){
 			case 'create-room':
-				debugger
 				addRoom( payload.room );
 				RoomsStore.emit( 'change' );
 				break;
