@@ -35,6 +35,9 @@ var RoomsStore = merge( EventEmitter.prototype, {
 				removeRoom( payload.roomKey );
 				RoomsStore.emit( 'change' );
 				break;
+			case 'navigate':
+				RoomsStore.emit( 'change' );
+				break;
 		}
 
 		return true;

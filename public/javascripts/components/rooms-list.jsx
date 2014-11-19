@@ -1,7 +1,7 @@
 var React = require('react');
 var spinner = require('./spinner');
 var RoomsStore = require('../stores/rooms-store');
-var ParticipantUtils = require('../utils/participant-utils');
+var StateActions = require('../actions/state-actions');
 var RoomsServerActions = require('../actions/rooms-server-actions');
 
 var RoomsList = React.createClass({
@@ -13,6 +13,7 @@ var RoomsList = React.createClass({
 	},
 
 	componentDidMount: function(){
+		this.onStoreChange();
 		RoomsStore.on('change', this.onStoreChange );
 	},
 
@@ -48,16 +49,23 @@ var RoomListItem = React.createClass({
 	render: function(){
 		var deleteBtn = null;
 
-		if ( this.props.room.owner === ParticipantUtils.generateParticipantId() ){
+		var ownedRooms = JSON.parse( localStorage.getItem('ownedRooms') ) || [];
+		var idx = ownedRooms.indexOf( this.props.room.key );
+
+		if ( idx > -1 ){
 			deleteBtn = <button onClick={this.handleDelete}>Delete</button>;
 		}
 
 		return (
 			<li>
-				<span>{this.props.room.name}</span>
+				<a onClick={this.goToRoom}><span>{this.props.room.name}</span></a>
 				{deleteBtn}
 			</li>
 		)
+	},
+
+	goToRoom: function(){
+		StateActions.navigateToState({ stateName: 'room', room: this.props.room });
 	},
 
 	handleDelete: function(){

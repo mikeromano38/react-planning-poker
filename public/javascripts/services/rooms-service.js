@@ -24,7 +24,7 @@ var RoomsService = function(){
 	}
 
 	function create( room ){
-		connection.push( room );
+		return connection.push( room );
 	}
 
 	function remove( key ){
