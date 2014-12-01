@@ -23,6 +23,15 @@ var RoomsStore = merge( EventEmitter.prototype, {
 		return _rooms;
 	},
 
+	getRoom: function( roomKey ){
+		for( var i = 0, l = _rooms.length; i < l; i++ ){
+			if ( _rooms[ i ].key === roomKey ){
+				return _rooms[ i ];
+				break;
+			}
+		}
+	},
+
 	dispatcherIndex: AppDispatcher.register(function( payload ){
 		var action = payload.actionType;
 

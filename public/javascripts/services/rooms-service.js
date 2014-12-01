@@ -2,7 +2,6 @@ var RoomsActions = require('../actions/rooms-actions');
 var connection = null;
 
 var RoomsService = function(){
-
 	if (!connection){
 		connection = new Firebase('https://romanocreative.firebaseio.com/rooms');
 

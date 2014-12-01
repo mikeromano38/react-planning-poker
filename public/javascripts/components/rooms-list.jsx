@@ -3,8 +3,11 @@ var spinner = require('./spinner');
 var RoomsStore = require('../stores/rooms-store');
 var StateActions = require('../actions/state-actions');
 var RoomsServerActions = require('../actions/rooms-server-actions');
+var Router = require('react-router');
 
 var RoomsList = React.createClass({
+
+	mixins: [ Router.Navigation ],
 
 	getInitialState: function(){
 		return {
@@ -46,6 +49,9 @@ var RoomsList = React.createClass({
 });
 
 var RoomListItem = React.createClass({
+
+	mixins: [ Router.Navigation ],
+
 	render: function(){
 		var deleteBtn = null;
 
@@ -65,7 +71,7 @@ var RoomListItem = React.createClass({
 	},
 
 	goToRoom: function(){
-		StateActions.navigateToState({ stateName: 'room', room: this.props.room });
+		this.transitionTo( 'room', { id: this.props.room.key } );
 	},
 
 	handleDelete: function(){
