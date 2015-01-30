@@ -59,7 +59,7 @@ var RoomListItem = React.createClass({
 		var idx = ownedRooms.indexOf( this.props.room.key );
 
 		if ( idx > -1 ){
-			deleteBtn = <button onClick={this.handleDelete}>Delete</button>;
+			deleteBtn = <button className="btn btn-danger btn-xs" onClick={this.handleDelete}>Delete</button>;
 		}
 
 		return (

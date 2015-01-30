@@ -11,6 +11,11 @@ var RoomsActions = {
 		localStorage.setItem( 'ownedRooms', JSON.stringify( ownedRooms ) );
 	},
 
+	addParticipant: function( key, userId ){
+		var roomsService = RoomsService();
+		return roomsService.addParticipant( key, userId );
+	},
+
 	removeRoom: function( roomKey ){
 		var roomsService = RoomsService();
 		roomsService.remove( roomKey );

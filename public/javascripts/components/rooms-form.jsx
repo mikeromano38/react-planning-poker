@@ -1,6 +1,7 @@
 var RoomsServerActions = require('../actions/rooms-server-actions');
 var ParticipantUtils = require('../utils/participant-utils');
 var AppInfoStore = require('../stores/app-info-store');
+var UsersServerActions = require('../actions/users-server-actions');
 var React = require('react');
 
 var RoomsForm = React.createClass({
@@ -8,7 +9,7 @@ var RoomsForm = React.createClass({
 	getInitialState: function(){
 		return {
 			name: null,
-			participants: []
+			participants: {}
 		}
 	},
 
@@ -43,8 +44,8 @@ var RoomsForm = React.createClass({
 	render: function(){
 		return (
 			<form onSubmit={this.handleSubmit}>
-				<input type="text" value={this.state.name} placeholder="Enter New Room Name" onChange={this.handleChangeName} />
-				<button type="submit" >Create</button>
+				<input className="form-control col-sm-3" type="text" value={this.state.name} placeholder="Enter New Room Name" onChange={this.handleChangeName} />
+				<button className="btn btn-primary" type="submit" >Create</button>
 			</form>
 		)
 	}

@@ -1,6 +1,7 @@
 var React = require('react');
 var RouteHandler = require('react-router').RouteHandler;
 var RoomsService = require('../services/rooms-service');
+var UsersService = require('../services/users-service');
 
 var PlanningPoker = React.createClass({
 
@@ -12,6 +13,7 @@ var PlanningPoker = React.createClass({
 
 	componentDidMount: function(){
 		RoomsService();
+		UsersService();
 	},
 
 	render: function(){
