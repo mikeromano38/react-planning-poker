@@ -30,3 +30,4 @@ node_modules
 .ebextensions
 .elasticbeanstalk
 .idea
+bower_components
