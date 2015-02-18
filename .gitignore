@@ -31,3 +31,4 @@ node_modules
 .elasticbeanstalk
 .idea
 bower_components
+.elasticbeanstalk/
