@@ -8,6 +8,7 @@ var participant = null;
 var RoomUserList = React.createClass({
 	render: function(){
 		var users = [];
+		var self = this;
 
 		for ( var user in this.props.users ) {
 			this.props.users[ user ].key = user
@@ -17,7 +18,9 @@ var RoomUserList = React.createClass({
 		return (
 			<ul>
 				{users.map(function( user ){
-					return <li key={user.key}>{user.name} <Card value="3" /></li>
+					var displayValue = (user.selectedCard && self.props.revealCards) ? user.selectedCard : (user.selectedCard) ? "*" : "?";
+
+					return <li key={user.key}>{user.name} <Card value={displayValue} /></li>
 				})}
 			</ul>
 		);
@@ -32,9 +35,20 @@ var PokerHand = React.createClass({
 		}
 	},
 
+	componentDidMount: function(){
+		var self = this;
+
+		participant.on("value", function( snapshot ){
+			var state = self.state;
+			state.selected = snapshot.val().selectedCard;
+			this.setState( state );
+		});
+	},
+
 	selectCard: function( val ){
 		var state = this.state;
 		state.selected = val;
+		participant.update({selectedCard: val});
 		this.setState( state );
 	},
 
@@ -42,7 +56,7 @@ var PokerHand = React.createClass({
 		var self = this;
 
 		var cards = this.state.options.map(function( val ){
-			var selected = ( self.state.selected === val ) ? <span className="selected-indicator">selected</span> : '';
+			var selected = ( self.state.selected === val ) ? <span className="selected-indicator">&nbsp;&#10004;</span> : '';
 
 			console.log( selected );
 			return (
@@ -70,19 +84,22 @@ var Room = React.createClass({
 
 	mixins: [ Router.Navigation, Router.State ],
 
+	room: null,
+
 	getInitialState: function(){
 		var state = this.getRoomStateFromStore( this.getParams().id ) || {};
 		state.participantName = null;
+		state.selectedCard = null;
 		return state;
 	},
 
 	componentDidMount: function(){
 		RoomsStore.on('change', this.setStateFromStore );
 
-		var participants = new Firebase( 'https://romanocreative.firebaseio.com/rooms/' + this.getParams().id  );
+		this.room = new Firebase( 'https://romanocreative.firebaseio.com/rooms/' + this.getParams().id  );
 		var self = this;
 
-		participants.on("value", function( snapshot ){
+		this.room.on("value", function( snapshot ){
 			console.log( snapshot.val() );
 			var state = snapshot.val();
 			//state.participants = snapshot.val();
@@ -130,6 +147,18 @@ var Room = React.createClass({
 		this.setState( state );
 	},
 
+	revealCards: function(){
+		this.room.update({revealCards: true})
+	},
+
+	resetCards: function(){
+		var participants = new Firebase( 'https://romanocreative.firebaseio.com/rooms/' + this.getParams().id + '/participants'  );
+		this.room.update({revealCards: false})
+		participants.on("child_added", function( part ){
+			part.ref().update({selectedCard: null})
+		});
+	},
+
 	render: function(){
 		var view;
 
@@ -138,8 +167,10 @@ var Room = React.createClass({
 				<div>
 					<a onClick={this.navigateHome}>Back to home</a>
 					<h1 title={ this.getParams().id }>Room { this.state.name } | user: {this.state.participantName}</h1>
-					<PokerHand />
-					<RoomUserList users={this.state.participants}/>
+					<PokerHand onCardSelect={this.setSelectedCard} />
+					<button onClick={this.revealCards}>Reveal Cards</button>{(this.state.revealCards) ? "show cards" : "don't show cards"}
+					<button onClick={this.resetCards}>Reset Cards</button>
+					<RoomUserList users={this.state.participants} revealCards={this.state.revealCards}/>
 				</div>
 			);
 		} else {

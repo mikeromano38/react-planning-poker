@@ -16,6 +16,11 @@ var RoomsActions = {
 		return roomsService.addParticipant( key, userId );
 	},
 
+	setSelectedCard: function( key, userId, cardVal ){
+		var roomsService = RoomsService();
+		return roomsService.setSelectedCard( key, userId, cardVal );
+	},
+
 	removeRoom: function( roomKey ){
 		var roomsService = RoomsService();
 		roomsService.remove( roomKey );

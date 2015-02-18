@@ -31,6 +31,11 @@ var RoomsService = function(){
 		removeRef.remove();
 	}
 
+	function setSelectedCard( key, id, cardVal ){
+		var participant = new Firebase( 'https://romanocreative.firebaseio.com/rooms/' + key + '/participants/' + id );
+		participant.selectedCard = cardVal;
+	}
+
 	function addParticipant( key, name ){
 		var participants = new Firebase( 'https://romanocreative.firebaseio.com/rooms/' + key + '/participants' );
 		return participants.push({ name: name });
@@ -44,7 +49,8 @@ var RoomsService = function(){
 	return {
 		create: create,
 		addParticipant: addParticipant,
-		remove: remove
+		remove: remove,
+		setSelectedCard: setSelectedCard
 	}
 
 };
