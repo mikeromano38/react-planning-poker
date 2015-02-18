@@ -36,6 +36,11 @@ var RoomsService = function(){
 		return participants.push({ name: name });
 	}
 
+	function removeParticipant( key, participantId ){
+		var participant = new Firebase( 'https://romanocreative.firebaseio.com/rooms/' + key + '/participants/' + participantId );
+		participant.remove();
+	}
+
 	return {
 		create: create,
 		addParticipant: addParticipant,

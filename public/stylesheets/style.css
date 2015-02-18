@@ -6,3 +6,33 @@ body {
 a {
   color: #00B7FF;
 }
+
+.planning-card {
+  width: 50px;
+  height: 80px;
+  font-size: 40px;
+  line-height: 80px;
+  vertical-align: middle;
+  display: inline-block;
+  border: 1px solid black;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.poker-hand {
+  list-style-type: none;
+}
+
+.poker-hand li {
+  display: inline-block;
+}
+
+.card-wrapper {
+  position: relative;
+}
+
+.card-wrapper .selected-indicator {
+  position: absolute;
+  left: 0;
+  bottom: 4px;
+}
