@@ -41,7 +41,7 @@ var PokerHand = React.createClass({
 		participant.on("value", function( snapshot ){
 			var state = self.state;
 			state.selected = snapshot.val().selectedCard;
-			this.setState( state );
+			self.setState( state );
 		});
 	},
 
@@ -57,10 +57,8 @@ var PokerHand = React.createClass({
 
 		var cards = this.state.options.map(function( val ){
 			var selected = ( self.state.selected === val ) ? <span className="selected-indicator">&nbsp;&#10004;</span> : '';
-
-			console.log( selected );
 			return (
-				<li className="card-wrapper" onClick={self.selectCard.bind(self, val)}><Card value={val}/>{selected}</li>
+				<li className="card-wrapper" key={val} onClick={self.selectCard.bind(self, val)}><Card value={val}/>{selected}</li>
 			);
 		})
 
@@ -100,18 +98,16 @@ var Room = React.createClass({
 		var self = this;
 
 		this.room.on("value", function( snapshot ){
-			console.log( snapshot.val() );
 			var state = snapshot.val();
 			//state.participants = snapshot.val();
 			state.participantName = self.state.participantName;
-			//
 			self.setState( state );
 		});
 	},
 
 	componentWillUnmount: function(){
-		this.leaveRoom();
 		RoomsStore.removeListener('change', this.setStateFromStore );
+		this.leaveRoom();
 	},
 
 	getRoomStateFromStore: function(){
@@ -125,7 +121,9 @@ var Room = React.createClass({
 		this.setState( state );
 	},
 
-	enterRoom: function(){
+	enterRoom: function( evt ){
+		evt.preventDefault();
+
 		participant = RoomsServerActions.addParticipant( this.getParams().id, this.state.participantName );
 		participant.onDisconnect().remove();
 
@@ -165,8 +163,7 @@ var Room = React.createClass({
 		if ( participant ){
 			view = (
 				<div>
-					<a onClick={this.navigateHome}>Back to home</a>
-					<h1 title={ this.getParams().id }>Room { this.state.name } | user: {this.state.participantName}</h1>
+					<h4 title={ this.getParams().id }><a onClick={this.navigateHome}>Back to home</a> | Welcome to Room { this.state.name }</h4>
 					<PokerHand onCardSelect={this.setSelectedCard} />
 					<button onClick={this.revealCards}>Reveal Cards</button>{(this.state.revealCards) ? "show cards" : "don't show cards"}
 					<button onClick={this.resetCards}>Reset Cards</button>
@@ -176,9 +173,14 @@ var Room = React.createClass({
 		} else {
 			view = (
 				<div>
-					<label>Enter a name to use in the planning room:</label>
-					<input onChange={this.handleUserNameKeyup} value={this.state.participantName} placeholder="Enter Name"/>
-					<button onClick={this.enterRoom}>Enter Room</button>
+					<h4 title={ this.getParams().id }><a onClick={this.navigateHome}>Back to home</a> | Welcome to Room { this.state.name }</h4>
+					<form className="form-inline">
+						<div className="form-group">
+							<label for="user-name">User Name:</label>
+							<input onChange={this.handleUserNameKeyup} className="form-control" name="user-name" value={this.state.participantName} placeholder="Enter Your User Name"/>
+						</div>
+						<button onClick={this.enterRoom} className="btn btn-primary">Enter Room</button>
+					</form>
 				</div>
 			);
 		}

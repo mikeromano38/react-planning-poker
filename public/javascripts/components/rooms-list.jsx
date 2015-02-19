@@ -30,7 +30,8 @@ var RoomsList = React.createClass({
 			loading = <Spinner />;
 		}
 		return (
-			<div>
+			<div className="col-sm-6">
+				<h4>Active Rooms</h4>
 				{loading}
 				<ul>
 					{this.state.rooms.map(function(room) {
@@ -51,6 +52,13 @@ var RoomsList = React.createClass({
 var RoomListItem = React.createClass({
 
 	mixins: [ Router.Navigation ],
+
+	componentDidMount: function(){
+		debugger;
+		if ( !this.props.room.participants || !Object.keys( this.props.room.participants ).length ){
+			this.handleDelete();
+		}
+	},
 
 	render: function(){
 		var deleteBtn = null;

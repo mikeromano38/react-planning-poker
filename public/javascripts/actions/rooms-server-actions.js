@@ -9,6 +9,8 @@ var RoomsActions = {
 		var ownedRooms = JSON.parse( localStorage.getItem( 'ownedRooms' ) ) || [];
 		ownedRooms.push( newRoom.name() );
 		localStorage.setItem( 'ownedRooms', JSON.stringify( ownedRooms ) );
+
+		return newRoom;
 	},
 
 	addParticipant: function( key, userId ){
