@@ -1,6 +1,4 @@
 var RoomsActions = require('../actions/rooms-actions');
-var ParticipantUtils = require('../utils/participant-utils');
-var AppInfoStore = require('../stores/app-info-store');
 var React = require('react');
 var Router = require('react-router');
 
@@ -15,15 +13,6 @@ var RoomsForm = React.createClass({
 		}
 	},
 
-	componentDidMount: function(){
-		//add our unique id once the app info api has loaded
-		AppInfoStore.on('app-info-loaded', this.onAppInfoLoad );
-	},
-
-	componentWillUnmount: function(){
-		AppInfoStore.removeListener('app-info-loaded', this.onAppInfoLoad );
-	},
-
 	handleSubmit: function( evt ){
 		evt.preventDefault();
 
@@ -31,17 +20,13 @@ var RoomsForm = React.createClass({
 			return false;
 		}
 
-		RoomsActions.createRoom( this.state );
+		RoomsActions.createRoom( this.state );  
 
 		this.setState({ name: '' });
 	},
 
 	handleChangeName: function( evt ){
 		this.setState({ name: evt.currentTarget.value });
-	},
-
-	onAppInfoLoad: function(){
-		this.state.owner = ParticipantUtils.generateParticipantId();
 	},
 
 	render: function(){

@@ -2,7 +2,6 @@ var EventEmitter = require('events').EventEmitter;
 var merge = require('react/lib/merge');
 var AppDispatcher = require('../dispatcher/app-dispatcher');
 var firebaseConnection  = require('../firebaseConnection');
-var RoomsServerActions = require('../actions/rooms-server-actions');
 
 var _rooms = [];
 var _loaded = false;
@@ -19,8 +18,6 @@ roomsRef.on('value', function( snapshot ){
 	updateRooms( roomList );
 	RoomsStore.emit('change');
 
-}, function( err ){
-	RoomsServerActions.roomLoadedFailure( err );
 });
 
 var updateRooms = function( newRooms ){
