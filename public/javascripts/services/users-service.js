@@ -1,23 +1,17 @@
-var connection = null;
+var firebaseConnection = require('../firebaseConnection');
 
-var UsersService = function(){
-	if (!connection){
-		connection = new Firebase('https://romanocreative.firebaseio.com/users');
-	}
+var usersRef = firebaseConnection.child('/users');
 
-	function create( user ){
-		return connection.push( user );
-	}
+function create( user ){
+	return usersRef.push( user );
+}
 
-	function remove( key ){
-		var removeRef = new Firebase('https://romanocreative.firebaseio.com/users/' + key );
-		removeRef.remove();
-	}
+function remove( key ){
+	var removeRef = firebaseConnection.child('/users/' + key );
+	removeRef.remove();
+}
 
-	return {
-		create: create,
-		remove: remove
-	}
+module.exports = {
+	create: create,
+	remove: remove
 };
-
-module.exports = UsersService;

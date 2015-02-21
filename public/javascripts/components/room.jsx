@@ -1,9 +1,7 @@
 var React = require('react');
 var RoomsStore = require('../stores/rooms-store');
 var Router = require('react-router');
-var RoomsServerActions = require('../actions/rooms-server-actions');
-
-var participant = null;
+var RoomsActions = require('../actions/rooms-actions');
 
 var RoomUserList = React.createClass({
 	render: function(){
@@ -18,7 +16,7 @@ var RoomUserList = React.createClass({
 		return (
 			<ul>
 				{users.map(function( user ){
-					var displayValue = (user.selectedCard && self.props.revealCards) ? user.selectedCard : (user.selectedCard) ? "*" : "?";
+					var displayValue = (user.selected && self.props.revealCards) ? user.selected : (user.selected) ? "*" : "?";
 
 					return <li key={user.key}>{user.name} <Card value={displayValue} /></li>
 				})}
@@ -36,20 +34,20 @@ var PokerHand = React.createClass({
 	},
 
 	componentDidMount: function(){
-		var self = this;
+		RoomsStore.on( 'change', this.setStateFromStore );
+	},
 
-		participant.on("value", function( snapshot ){
-			var state = self.state;
-			state.selected = snapshot.val().selectedCard;
-			self.setState( state );
-		});
+	componentWillUnmount: function(){
+		RoomsStore.removeListener( 'change', this.setStateFromStore );
+	},
+
+	setStateFromStore: function(){
+		this.state.selected = RoomsStore.getCurrentUser().selected;
+		this.setState( this.state );
 	},
 
 	selectCard: function( val ){
-		var state = this.state;
-		state.selected = val;
-		participant.update({selectedCard: val});
-		this.setState( state );
+		RoomsActions.setSelectedForCurrentUser( val );
 	},
 
 	render: function(){
@@ -60,7 +58,7 @@ var PokerHand = React.createClass({
 			return (
 				<li className="card-wrapper" key={val} onClick={self.selectCard.bind(self, val)}><Card value={val}/>{selected}</li>
 			);
-		})
+		});
 
 		return (
 			<ul className="poker-hand">
@@ -82,102 +80,91 @@ var Room = React.createClass({
 
 	mixins: [ Router.Navigation, Router.State ],
 
-	room: null,
-
 	getInitialState: function(){
-		var state = this.getRoomStateFromStore( this.getParams().id ) || {};
-		state.participantName = null;
-		state.selectedCard = null;
-		return state;
+		var room = RoomsStore.getRoom( this.getParams().id );
+		var user = {
+			name: null,
+			selected: null
+		};
+
+		return {
+			room: room,
+			user: user
+		};
 	},
 
 	componentDidMount: function(){
-		RoomsStore.on('change', this.setStateFromStore );
-
-		this.room = new Firebase( 'https://romanocreative.firebaseio.com/rooms/' + this.getParams().id  );
-		var self = this;
-
-		this.room.on("value", function( snapshot ){
-			var state = snapshot.val();
-			//state.participants = snapshot.val();
-			state.participantName = self.state.participantName;
-			self.setState( state );
-		});
+		RoomsStore.on( 'change', this.updateStateFromStore );
 	},
 
 	componentWillUnmount: function(){
-		RoomsStore.removeListener('change', this.setStateFromStore );
+		RoomsStore.removeListener('change', this.updateStateFromStore );
 		this.leaveRoom();
 	},
 
-	getRoomStateFromStore: function(){
-		return RoomsStore.getRoom( this.getParams().id ) || {};
-	},
-
-	setStateFromStore: function(){
-		var state = this.getRoomStateFromStore();
-			state.participantName = this.state.participantName;
+	updateStateFromStore: function(){
+		var state = {
+			room: RoomsStore.getRoom( this.getParams().id ),
+			user : {
+				name: this.state.user.name,
+				selected: this.state.user.selected
+			}
+		};
 
 		this.setState( state );
 	},
 
 	enterRoom: function( evt ){
 		evt.preventDefault();
+		RoomsActions.addUserToRoom( this.state.user, this.getParams().id );
 
-		participant = RoomsServerActions.addParticipant( this.getParams().id, this.state.participantName );
-		participant.onDisconnect().remove();
-
-		this.forceUpdate();
 	},
 
 	leaveRoom: function(){
-		if ( participant ){
-			console.log( 'removing participant', participant.name )
-			participant.remove();
-			participant = null;
+		if ( RoomsStore.getCurrentUser() ){
+			RoomsActions.removeCurrentUser();
 		}
 	},
 
 	handleUserNameKeyup: function( evt ){
-		var state = this.state;
-		this.state.participantName = evt.target.value;
-
-		this.setState( state );
+		this.state.user.name = evt.target.value;
+		this.setState( this.state );
 	},
 
 	revealCards: function(){
-		this.room.update({revealCards: true})
+		RoomsActions.revealCardsForRoom( true, this.getParams().id );
 	},
 
 	resetCards: function(){
-		var participants = new Firebase( 'https://romanocreative.firebaseio.com/rooms/' + this.getParams().id + '/participants'  );
-		this.room.update({revealCards: false})
-		participants.on("child_added", function( part ){
-			part.ref().update({selectedCard: null})
-		});
+		RoomsActions.resetCardsForRoom( this.getParams().id );
+	},
+
+	navigateHome: function(){
+		this.transitionTo( 'home' );
 	},
 
 	render: function(){
 		var view;
+		var currentUser = RoomsStore.getCurrentUser();
 
-		if ( participant ){
+		if ( currentUser ){
 			view = (
 				<div>
-					<h4 title={ this.getParams().id }><a onClick={this.navigateHome}>Back to home</a> | Welcome to Room { this.state.name }</h4>
-					<PokerHand onCardSelect={this.setSelectedCard} />
-					<button onClick={this.revealCards}>Reveal Cards</button>{(this.state.revealCards) ? "show cards" : "don't show cards"}
+					<h4><a onClick={this.navigateHome}>Back to home</a> | Welcome to Room { this.state.room.name }</h4>
+					<PokerHand />
+					<button onClick={this.revealCards}>Reveal Cards</button>
 					<button onClick={this.resetCards}>Reset Cards</button>
-					<RoomUserList users={this.state.participants} revealCards={this.state.revealCards}/>
+					<RoomUserList users={this.state.room.participants} revealCards={this.state.room.revealCards}/>
 				</div>
 			);
 		} else {
 			view = (
 				<div>
-					<h4 title={ this.getParams().id }><a onClick={this.navigateHome}>Back to home</a> | Welcome to Room { this.state.name }</h4>
+					<h4><a onClick={this.navigateHome}>Back to home</a> | Welcome to Room { this.state.room.name }</h4>
 					<form className="form-inline">
 						<div className="form-group">
 							<label for="user-name">User Name:</label>
-							<input onChange={this.handleUserNameKeyup} className="form-control" name="user-name" value={this.state.participantName} placeholder="Enter Your User Name"/>
+							<input onChange={this.handleUserNameKeyup} className="form-control" name="user-name" value={this.state.user.name} placeholder="Enter Your User Name"/>
 						</div>
 						<button onClick={this.enterRoom} className="btn btn-primary">Enter Room</button>
 					</form>
@@ -186,10 +173,6 @@ var Room = React.createClass({
 		}
 
 		return view;
-	},
-
-	navigateHome: function(){
-		this.transitionTo( 'home' );
 	}
 });
 

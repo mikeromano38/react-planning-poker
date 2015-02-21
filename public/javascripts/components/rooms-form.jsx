@@ -1,7 +1,6 @@
-var RoomsServerActions = require('../actions/rooms-server-actions');
+var RoomsActions = require('../actions/rooms-actions');
 var ParticipantUtils = require('../utils/participant-utils');
 var AppInfoStore = require('../stores/app-info-store');
-var UsersServerActions = require('../actions/users-server-actions');
 var React = require('react');
 var Router = require('react-router');
 
@@ -32,14 +31,9 @@ var RoomsForm = React.createClass({
 			return false;
 		}
 
-		var room = RoomsServerActions.createRoom( this.state );
-		var self = this;
+		RoomsActions.createRoom( this.state );
 
 		this.setState({ name: '' });
-
-		room.on("value", function( snapshot ){
-			self.transitionTo( 'room', { id: snapshot.name() })
-		});
 	},
 
 	handleChangeName: function( evt ){

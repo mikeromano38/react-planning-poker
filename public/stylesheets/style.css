@@ -27,6 +27,22 @@ a:hover, button:hover {
   display: inline-block;
 }
 
+.rooms-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.rooms-list li {
+  margin-bottom: 10px;
+  width: 200px;
+  position: relative;
+}
+
+.rooms-list li .btn-danger {
+  position: absolute;
+  right: 0;
+}
+
 .card-wrapper {
   position: relative;
 }
