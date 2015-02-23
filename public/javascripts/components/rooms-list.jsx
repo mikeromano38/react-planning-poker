@@ -38,7 +38,7 @@ var RoomsList = React.createClass({
 		var contents = null;
 
 		if ( this.state.rooms.length === 0 && !this.state.updated ){
-			loading = <li><Spinner /></li>;
+			contents = <tr><td><Spinner /></td></tr>;
 		}
 
 		if ( this.state.rooms.length ){
@@ -46,17 +46,25 @@ var RoomsList = React.createClass({
 				return <RoomListItem room={room} key={room.key} />;
 			});
 		} else if ( !this.state.rooms.length && this.state.updated ){
-			contents = <li>There are no active rooms.</li>
+			contents = <tr><td>There are no active rooms.</td></tr>
 		}
 
 		return (
 			<div className="col-sm-6">
 				<h4>Active Rooms</h4>
-				{loading}
 
-				<ul className="rooms-list">
-					{contents}
-				</ul>
+				<table className="table">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Participants</th>
+							<th>Delete</th>
+						</tr>
+					</thead>
+					<tbody>
+						{contents}
+					</tbody>
+				</table>
 			</div>
 			)
 	}
@@ -81,22 +89,20 @@ var RoomListItem = React.createClass({
 	},
 
 	render: function(){
-
-		//TODO: implement this correctly by tracking user/owned rooms on the server
-		//var deleteBtn = null;
-		//
-		//var ownedRooms = JSON.parse( localStorage.getItem( 'ownedRooms' ) ) || [];
-		//var idx = ownedRooms.indexOf( this.props.room.key );
-
-		//if ( idx > -1 ){
-		//	deleteBtn = <button className="btn btn-danger btn-xs" onClick={this.handleDelete}>Delete</button>;
-		//}
-
+		var numParticipants = ( this.props.room.participants ) ? Object.keys( this.props.room.participants ).length : 0;
+		var deleteButton = ( !numParticipants ) ? <button className="btn btn-danger btn-xs" onClick={this.handleDelete}>Delete</button> : '';
 		return (
-			<li>
-				<a onClick={this.goToRoom}><span>{this.props.room.name}</span></a>
-				<button className="btn btn-danger btn-xs" onClick={this.handleDelete}>Delete</button>
-			</li>
+			<tr>
+				<td>
+					<a onClick={this.goToRoom}><span>{this.props.room.name}</span></a>
+				</td>
+				<td>
+					<span>{numParticipants}</span>
+				</td>
+				<td>
+					{deleteButton}
+				</td>
+			</tr>
 		)
 	}
 });

@@ -2,6 +2,59 @@ var React = require('react');
 var RoomsStore = require('../stores/rooms-store');
 var Router = require('react-router');
 var RoomsActions = require('../actions/rooms-actions');
+var Card = require('./cards.jsx').Card;
+var PokerHand = require('./cards.jsx').PokerHand;
+
+var options = [1, 2, 3, 5, 8, 13];
+
+var EstimationResults = React.createClass({
+
+	mixins: [ Router.Navigation, Router.State ],
+
+	getInitialState: function(){
+		return {
+			options: []
+		}
+	},
+
+	componentDidMount: function(){
+		this.updateStateFromStore();
+		RoomsStore.on('change', this.updateStateFromStore );
+	},
+
+	componentWillUnmount: function(){
+		RoomsStore.removeListener('change', this.updateStateFromStore);
+	},
+
+	updateStateFromStore: function(){
+		this.setState({
+			options: RoomsStore.getEstimationResultsForRoom( this.props.options, this.getParams().id )
+		});
+	},
+
+	render: function(){
+
+		var results = this.state.options.map(function( option ){
+			return (
+				<tr><td>{option.val}</td><td>{option.numVotes}</td></tr>
+			);
+		});
+
+		return (
+			<table className="table">
+				<thead>
+					<tr>
+						<th>Value</th>
+						<th>Votes</th>
+					</tr>
+				</thead>
+				<tbody>
+					{results}
+				</tbody>
+			</table>
+		);
+	}
+});
 
 var RoomUserList = React.createClass({
 	render: function(){
@@ -14,7 +67,7 @@ var RoomUserList = React.createClass({
 		}
 
 		return (
-			<ul>
+			<ul className="room-user-list">
 				{users.map(function( user ){
 					var displayValue = (user.selected && self.props.revealCards) ? user.selected : (user.selected) ? "*" : "?";
 
@@ -25,63 +78,12 @@ var RoomUserList = React.createClass({
 	}
 });
 
-var PokerHand = React.createClass({
-	getInitialState: function(){
-		return {
-			options: [1, 2, 3, 5, 8, 13],
-			selected: null
-		}
-	},
-
-	componentDidMount: function(){
-		RoomsStore.on( 'change', this.setStateFromStore );
-	},
-
-	componentWillUnmount: function(){
-		RoomsStore.removeListener( 'change', this.setStateFromStore );
-	},
-
-	setStateFromStore: function(){
-		this.state.selected = RoomsStore.getCurrentUser().selected;
-		this.setState( this.state );
-	},
-
-	selectCard: function( val ){
-		RoomsActions.setSelectedForCurrentUser( val );
-	},
-
-	render: function(){
-		var self = this;
-
-		var cards = this.state.options.map(function( val ){
-			var selected = ( self.state.selected === val ) ? <span className="selected-indicator">&nbsp;&#10004;</span> : '';
-			return (
-				<li className="card-wrapper" key={val} onClick={self.selectCard.bind(self, val)}><Card value={val}/>{selected}</li>
-			);
-		});
-
-		return (
-			<ul className="poker-hand">
-				{cards}
-			</ul>
-		);
-	}
-});
-
-var Card = React.createClass({
-	render: function(){
-		return (
-			<div className="planning-card">{this.props.value}</div>
-		);
-	}
-});
-
 var Room = React.createClass({
 
 	mixins: [ Router.Navigation, Router.State ],
 
 	getInitialState: function(){
-		var room = RoomsStore.getRoom( this.getParams().id );
+		var room = RoomsStore.getRoom( this.getParams().id ) || {};
 		var user = {
 			name: null,
 			selected: null
@@ -135,6 +137,10 @@ var Room = React.createClass({
 		RoomsActions.revealCardsForRoom( true, this.getParams().id );
 	},
 
+	hideCards: function(){
+		RoomsActions.revealCardsForRoom( false, this.getParams().id );
+	},
+
 	resetCards: function(){
 		RoomsActions.resetCardsForRoom( this.getParams().id );
 	},
@@ -148,13 +154,32 @@ var Room = React.createClass({
 		var currentUser = RoomsStore.getCurrentUser();
 
 		if ( currentUser ){
+
+			var revealBtn;
+			var results;
+
+			var votes = RoomsStore.getEstimationResultsForRoom( options, this.getParams().id ).filter(function( result ){
+				return result.numVotes > 0;
+			});
+
+			if ( !this.state.room.revealCards ){
+				revealBtn = <button disabled={!votes.length} onClick={this.revealCards} className="btn btn-primary">Reveal Cards</button>
+			} else  {
+				revealBtn = <button disabled={!votes.length} onClick={this.hideCards} className="btn btn-primary">Hide Cards</button>
+			}
+
+			if ( this.state.room.revealCards && votes.length ){
+				results = <EstimationResults options={options} />;
+			}
+
 			view = (
 				<div>
 					<h4><a onClick={this.navigateHome}>Back to home</a> | Welcome to Room { this.state.room.name }</h4>
-					<PokerHand />
-					<button onClick={this.revealCards}>Reveal Cards</button>
-					<button onClick={this.resetCards}>Reset Cards</button>
+					<PokerHand options={options} />
+					{revealBtn}
+					<button onClick={this.resetCards} disabled={!votes.length} className="btn btn-primary">Reset Cards</button>
 					<RoomUserList users={this.state.room.participants} revealCards={this.state.room.revealCards}/>
+					{results}
 				</div>
 			);
 		} else {

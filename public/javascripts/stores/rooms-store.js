@@ -56,6 +56,35 @@ var resetCardsForRoom = function( roomKey ){
 	});
 };
 
+var getEstimationResultsForRoom = function( options, roomKey ){
+	var participants;
+	var participant;
+	var results = options.map(function( opt ){
+		return { val: opt, numVotes: 0 };
+	});
+
+	var room = _rooms.filter(function( room ){
+		return room.key === roomKey;
+	})[ 0 ];
+
+	if ( room ){
+		participants = room.participants;
+
+		if ( participants ){
+			for ( var partKey in participants ){
+				participant = participants[ partKey ];
+				if ( participant.selected ){
+					results.filter(function( opt ){
+						return opt.val === participant.selected;
+					})[ 0 ].numVotes++;
+				}
+			}
+		}
+	}
+
+	return results;
+};
+
 var addUserToRoom = function( user, roomKey ){
 	if ( _currentUserRef ){
 		_currentUserRef.off();
@@ -93,6 +122,8 @@ var RoomsStore = merge( EventEmitter.prototype, {
 			}
 		}
 	},
+
+	getEstimationResultsForRoom: getEstimationResultsForRoom,
 
 	getCurrentUser: function(){
 		return _currentUser;
