@@ -123,7 +123,9 @@ var Room = React.createClass({
 	},
 
 	leaveRoom: function(){
-		if ( RoomsStore.getCurrentUser() ){
+		var currentUser = RoomsStore.getCurrentUser();
+
+		if ( currentUser ){
 			RoomsActions.removeCurrentUser();
 		}
 	},
@@ -146,6 +148,7 @@ var Room = React.createClass({
 	},
 
 	navigateHome: function(){
+		this.leaveRoom();
 		this.transitionTo( 'home' );
 	},
 

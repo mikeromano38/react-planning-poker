@@ -73,7 +73,7 @@ var getEstimationResultsForRoom = function( options, roomKey ){
 		if ( participants ){
 			for ( var partKey in participants ){
 				participant = participants[ partKey ];
-				if ( participant.selected ){
+				if ( participant && participant.selected ){
 					results.filter(function( opt ){
 						return opt.val === participant.selected;
 					})[ 0 ].numVotes++;
@@ -96,12 +96,23 @@ var addUserToRoom = function( user, roomKey ){
 
 	_currentUserRef.on('value', function( snapshot ){
 		_currentUser = snapshot.val();
+
+		if ( _currentUser ){
+			_currentUser.key = snapshot.name();
+		}
+
 		RoomsStore.emit('change');
 	});
 };
 
 var setSelectedForCurrentUser = function( val ){
 	_currentUserRef.update({ selected: val });
+};
+
+var removeCurrentUser = function(){
+	_currentUserRef.off();
+	_currentUserRef.remove();
+	_currentUser = null;
 };
 
 var RoomsStore = merge( EventEmitter.prototype, {
@@ -129,10 +140,6 @@ var RoomsStore = merge( EventEmitter.prototype, {
 		return _currentUser;
 	},
 
-	removeCurrentUser: function(){
-		_currentUserRef.remove();
-	},
-
 	dispatcherIndex: AppDispatcher.register(function( payload ){
 		var action = payload.actionType;
 
@@ -142,6 +149,9 @@ var RoomsStore = merge( EventEmitter.prototype, {
 				break;
 			case 'remove-room':
 				removeRoom( payload.roomKey );
+				break;
+			case 'remove-current-user':
+				removeCurrentUser();
 				break;
 			case 'add-user-to-room':
 				addUserToRoom( payload.user, payload.roomKey );
