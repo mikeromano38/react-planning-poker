@@ -1,0 +1,14 @@
+input,button{
+  margin:0 5px;
+}
+
+a:hover, button:hover {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.card-wrapper .selected-indicator {
+  position: absolute;
+  left: 0;
+  bottom: 4px;
+}

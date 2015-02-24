@@ -10,6 +10,7 @@ var PokerHand = React.createClass({
 	getInitialState: function(){
 		return {
 			options: [],
+			room: null,
 			selected: null
 		}
 	},
@@ -25,7 +26,7 @@ var PokerHand = React.createClass({
 
 	setStateFromStore: function(){
 		this.state.selected = RoomsStore.getCurrentUser().selected;
-		debugger
+		this.state.room = RoomsStore.getRoom( this.getParams().id );
 		this.state.options = RoomsStore.getValues( this.getParams().id );
 		this.setState( this.state );
 	},
@@ -40,11 +41,12 @@ var PokerHand = React.createClass({
 
 	render: function(){
 		var self = this;
+		var revealed = this.state.room && this.state.room.revealCards;
 
 		var cards = this.state.options.map(function( val ){
 			var selected = ( self.state.selected === val ) ? <span className="selected-indicator">&nbsp;&#10004;</span> : '';
 			return (
-				<li className="card-wrapper" key={val} onClick={self.selectCard.bind(self, val)}><Card value={val}/>{selected}</li>
+				<li className="card-wrapper" key={val} onClick={self.selectCard.bind(self, val)}><Card flipped={revealed} value={val}/>{selected}</li>
 			);
 		});
 
@@ -58,8 +60,20 @@ var PokerHand = React.createClass({
 
 var Card = React.createClass({
 	render: function(){
+
+		var className = ( this.props.flipped ) ? 'flipped' : '';
+
 		return (
-			<div className="planning-card">{this.props.value}</div>
+			<div id="f1_container" className={className}>
+				<div id="f1_card" className="shadow planning-card">
+					<div className="front face">
+						<div>?</div>
+					</div>
+					<div className="back face center">
+						<p>{this.props.value}</p>
+					</div>
+				</div>
+			</div>
 		);
 	}
 });

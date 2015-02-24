@@ -1,0 +1,69 @@
+@import 'bourbon';
+
+.planning-card {
+  width: 50px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  height: 80px;
+  font-size: 40px;
+  line-height: 80px;
+  vertical-align: middle;
+  display: inline-block;
+  border: 1px solid black;
+  border-radius: 5px;
+  text-align: center;
+
+  .front {
+    background: blue;
+    color: white;
+    font-size: 40px;
+  }
+
+  .back {
+    font-size: 24px;
+    background: white;
+    color: black;
+  }
+}
+
+@include animation(all .5s ease-in-out);
+
+.poker-hand {
+  list-style-type: none;
+}
+
+.poker-hand li {
+  display: inline-block;
+}
+
+.room-user-list {
+  margin-top: 20px;
+  list-style-type: none;
+
+  .awesome {
+    display: none;
+  }
+}
+
+.room-user-list li {
+  clear: both;
+  width: 300px;
+  padding: 10px;
+  height: 100px;
+  line-height: 100px;
+  vertical-align: middle;
+}
+
+.room-user-list li:hover {
+  background-color: #add1f6;
+}
+
+.room-user-list .planning-card {
+  float: right;
+}
+
+.card-wrapper .selected-indicator {
+  position: absolute;
+  left: 0;
+  bottom: 4px;
+}

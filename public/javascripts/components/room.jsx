@@ -69,7 +69,7 @@ var RoomUserList = React.createClass({
 				{users.map(function( user ){
 					var displayValue = (user.selected && self.props.revealCards) ? user.selected : (user.selected) ? "*" : "?";
 
-					return <li key={user.key}>{user.name} <Card value={displayValue} /></li>
+					return <li key={user.key}>{user.name} <Card flipped={self.props.revealed} value={displayValue} /></li>
 				})}
 			</ul>
 		);
@@ -181,7 +181,7 @@ var Room = React.createClass({
 					<PokerHand cardsRevealed={this.state.room.revealCards} />
 					{revealBtn}
 					<button onClick={this.resetCards} disabled={!votes.length} className="btn btn-primary">Reset Cards</button>
-					<RoomUserList users={this.state.room.participants} revealCards={this.state.room.revealCards}/>
+					<RoomUserList revealed={this.state.room.revealCards} users={this.state.room.participants} revealCards={this.state.room.revealCards}/>
 					{results}
 				</div>
 			);
