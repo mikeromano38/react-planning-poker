@@ -3,6 +3,7 @@ var RoomsActions = require('../actions/rooms-actions');
 var RoomsStore = require('../stores/rooms-store');
 
 var PokerHand = React.createClass({
+
 	getInitialState: function(){
 		return {
 			options: this.props.options,
@@ -24,6 +25,10 @@ var PokerHand = React.createClass({
 	},
 
 	selectCard: function( val ){
+		if ( this.props.cardsRevealed ){
+			return;
+		}
+
 		RoomsActions.setSelectedForCurrentUser( val );
 	},
 

@@ -91,6 +91,20 @@ var addUserToRoom = function( user, roomKey ){
 	}
 
 	var participantsRef = firebaseConnection.child('/rooms/' + roomKey + '/participants' );
+	var roomRef = firebaseConnection.child('/rooms/' + roomKey );
+
+	/**
+	 * HACK: If this room was abandoned with the cards revealed
+	 * we must hide them
+	 */
+	roomRef.once('value', function( snapshot ){
+		var val = snapshot.val();
+
+		if ( val && ( !val.participants || !Object.keys( val.participants ).length ) && val.revealCards ){
+			roomRef.update({ revealCards: false });
+		}
+	});
+
 	_currentUserRef = participantsRef.push( user );
 	_currentUserRef.onDisconnect().remove();
 

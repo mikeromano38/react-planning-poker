@@ -27,6 +27,7 @@ var RoomsList = React.createClass({
 	onStoreChange: function(){
 		var rooms = RoomsStore.getAllRooms();
 		var updated = RoomsStore.isLoaded();
+
 		this.setState({
 			rooms: rooms,
 			updated: updated
@@ -34,7 +35,7 @@ var RoomsList = React.createClass({
 	},
 
 	render: function(){
-		var loading = null;
+
 		var contents = null;
 
 		if ( this.state.rooms.length === 0 && !this.state.updated ){

@@ -105,6 +105,7 @@ var Room = React.createClass({
 	},
 
 	updateStateFromStore: function(){
+
 		var state = {
 			room: RoomsStore.getRoom( this.getParams().id ),
 			user : {
@@ -114,12 +115,12 @@ var Room = React.createClass({
 		};
 
 		this.setState( state );
+
 	},
 
 	enterRoom: function( evt ){
 		evt.preventDefault();
 		RoomsActions.addUserToRoom( this.state.user, this.getParams().id );
-
 	},
 
 	leaveRoom: function(){
@@ -178,7 +179,7 @@ var Room = React.createClass({
 			view = (
 				<div>
 					<h4><a onClick={this.navigateHome}>Back to home</a> | Welcome to Room { this.state.room.name }</h4>
-					<PokerHand options={options} />
+					<PokerHand options={options} cardsRevealed={this.state.room.revealCards} />
 					{revealBtn}
 					<button onClick={this.resetCards} disabled={!votes.length} className="btn btn-primary">Reset Cards</button>
 					<RoomUserList users={this.state.room.participants} revealCards={this.state.room.revealCards}/>
