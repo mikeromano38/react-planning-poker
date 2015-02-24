@@ -56,12 +56,16 @@ var resetCardsForRoom = function( roomKey ){
 	});
 };
 
-var getEstimationResultsForRoom = function( options, roomKey ){
+var getValuesFromString = function( str ){
+	return str.trim().split(',').map(function( val ){
+		return val.trim();
+	});
+};
+
+var getEstimationResultsForRoom = function( roomKey ){
 	var participants;
 	var participant;
-	var results = options.map(function( opt ){
-		return { val: opt, numVotes: 0 };
-	});
+	var results = [];
 
 	var room = _rooms.filter(function( room ){
 		return room.key === roomKey;
@@ -69,6 +73,10 @@ var getEstimationResultsForRoom = function( options, roomKey ){
 
 	if ( room ){
 		participants = room.participants;
+
+		results = getValuesFromString( room.values ).map(function( opt ){
+			return { val: opt, numVotes: 0 };
+		});
 
 		if ( participants ){
 			for ( var partKey in participants ){
@@ -146,6 +154,14 @@ var RoomsStore = merge( EventEmitter.prototype, {
 				break;
 			}
 		}
+	},
+
+	getValues: function( roomKey ){
+		var room = _rooms.filter(function( room ){
+			return room.key === roomKey;
+		})[ 0 ];
+
+		return getValuesFromString( room.values );
 	},
 
 	getEstimationResultsForRoom: getEstimationResultsForRoom,

@@ -5,8 +5,6 @@ var RoomsActions = require('../actions/rooms-actions');
 var Card = require('./cards.jsx').Card;
 var PokerHand = require('./cards.jsx').PokerHand;
 
-var options = [1, 2, 3, 5, 8, 13];
-
 var EstimationResults = React.createClass({
 
 	mixins: [ Router.Navigation, Router.State ],
@@ -28,7 +26,7 @@ var EstimationResults = React.createClass({
 
 	updateStateFromStore: function(){
 		this.setState({
-			options: RoomsStore.getEstimationResultsForRoom( this.props.options, this.getParams().id )
+			options: RoomsStore.getEstimationResultsForRoom( this.getParams().id )
 		});
 	},
 
@@ -161,8 +159,9 @@ var Room = React.createClass({
 
 			var revealBtn;
 			var results;
+			var values = RoomsStore.getValues( this.getParams().id );
 
-			var votes = RoomsStore.getEstimationResultsForRoom( options, this.getParams().id ).filter(function( result ){
+			var votes = RoomsStore.getEstimationResultsForRoom( this.getParams().id ).filter(function( result ){
 				return result.numVotes > 0;
 			});
 
@@ -173,13 +172,13 @@ var Room = React.createClass({
 			}
 
 			if ( this.state.room.revealCards && votes.length ){
-				results = <EstimationResults options={options} />;
+				results = <EstimationResults />;
 			}
 
 			view = (
 				<div>
 					<h4><a onClick={this.navigateHome}>Back to home</a> | Welcome to Room { this.state.room.name }</h4>
-					<PokerHand options={options} cardsRevealed={this.state.room.revealCards} />
+					<PokerHand cardsRevealed={this.state.room.revealCards} />
 					{revealBtn}
 					<button onClick={this.resetCards} disabled={!votes.length} className="btn btn-primary">Reset Cards</button>
 					<RoomUserList users={this.state.room.participants} revealCards={this.state.room.revealCards}/>

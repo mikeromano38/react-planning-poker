@@ -1,17 +1,21 @@
 var React = require('react');
+var Router = require('react-router');
 var RoomsActions = require('../actions/rooms-actions');
 var RoomsStore = require('../stores/rooms-store');
 
 var PokerHand = React.createClass({
 
+	mixins: [ Router.Navigation, Router.State ],
+
 	getInitialState: function(){
 		return {
-			options: this.props.options,
+			options: [],
 			selected: null
 		}
 	},
 
 	componentDidMount: function(){
+		this.setStateFromStore();
 		RoomsStore.on( 'change', this.setStateFromStore );
 	},
 
@@ -21,6 +25,8 @@ var PokerHand = React.createClass({
 
 	setStateFromStore: function(){
 		this.state.selected = RoomsStore.getCurrentUser().selected;
+		debugger
+		this.state.options = RoomsStore.getValues( this.getParams().id );
 		this.setState( this.state );
 	},
 
