@@ -2,10 +2,12 @@ var EventEmitter = require('events').EventEmitter;
 var merge = require('react/lib/merge');
 var AppDispatcher = require('../dispatcher/app-dispatcher');
 var firebaseConnection  = require('../firebaseConnection');
+var NameGenerator = require('../utils/name-generator');
 
 var _rooms = [];
 var _loaded = false;
 var _currentUser = null;
+var _currentRoomKey = null;
 var _currentUserRef = null;
 
 var roomsRef = firebaseConnection.child('/rooms');
@@ -137,6 +139,22 @@ var removeCurrentUser = function(){
 	_currentUser = null;
 };
 
+var generateRandomNameForRoom = function( roomKey ) {
+	_currentRoomKey = roomKey;
+	NameGenerator.generate();
+};
+
+var setNameAndEnterRoom = function( name ){
+	if ( _currentRoomKey ){
+		addUserToRoom({ name: name }, _currentRoomKey );
+		_currentRoomKey = null;
+	}
+};
+
+var displayError = function( err ){
+	alert( err.body.message || 'There was an error.' );
+};
+
 var RoomsStore = merge( EventEmitter.prototype, {
 
 	isLoaded: function(){
@@ -195,6 +213,16 @@ var RoomsStore = merge( EventEmitter.prototype, {
 			case 'reset-cards-for-room':
 				resetCardsForRoom( payload.roomKey );
 				break;
+			case 'create-anonymous-name':
+				generateRandomNameForRoom( payload.roomKey );
+				break;
+			case 'name-generated-successfully':
+				setNameAndEnterRoom( payload.name );
+				break;
+			case 'name-generation-failure':
+				displayError( payload.err );
+				break;
+
 		}
 
 		return true;

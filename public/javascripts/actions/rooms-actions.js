@@ -50,6 +50,27 @@ var RoomsActions = {
 		AppDispatcher.dispatch({
 			actionType: 'remove-current-user'
 		});
+	},
+
+	createAnonymousNameForRoom: function( roomKey ){
+		AppDispatcher.dispatch({
+			actionType: 'create-anonymous-name',
+			roomKey: roomKey
+		});
+	},
+
+	nameGeneratedSuccessfully: function( name ){
+		AppDispatcher.dispatch({
+			actionType: 'name-generated-successfully',
+			name: name
+		});
+	},
+
+	nameGenerationFailure: function( err ){
+		AppDispatcher.dispatch({
+			actionType: 'name-generation-failure',
+			err: err
+		});
 	}
 
 };

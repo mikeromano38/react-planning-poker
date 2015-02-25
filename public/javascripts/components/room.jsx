@@ -156,6 +156,11 @@ var Room = React.createClass({
 		this.transitionTo( 'home' );
 	},
 
+	createAnonymousNameForRoom: function( evt ){
+		evt.preventDefault();
+		RoomsActions.createAnonymousNameForRoom( this.getParams().id );
+	},
+
 	render: function(){
 		var view;
 		var currentUser = RoomsStore.getCurrentUser();
@@ -164,11 +169,11 @@ var Room = React.createClass({
 
 			var revealBtn;
 			var results;
-			var values = RoomsStore.getValues( this.getParams().id );
 
 			var votes = RoomsStore.getEstimationResultsForRoom( this.getParams().id ).filter(function( result ){
 				return result.numVotes > 0;
 			});
+
 
 			if ( !this.state.room.revealCards ){
 				revealBtn = <button disabled={!votes.length} onClick={this.revealCards} className="btn btn-primary">Reveal Cards</button>
@@ -182,6 +187,7 @@ var Room = React.createClass({
 
 			view = (
 				<div className="col-sm-12">
+					<h3>Welcome { currentUser.name }!</h3>
 					<h4 className="room-heading"><a onClick={this.navigateHome}>Back to home</a> | Welcome to Room { this.state.room.name }</h4>
 					<PokerHand cardsRevealed={this.state.room.revealCards} />
 					{revealBtn}
@@ -200,6 +206,7 @@ var Room = React.createClass({
 							<input onChange={this.handleUserNameKeyup} className="form-control" name="user-name" value={this.state.user.name} placeholder="ex. BieberFever808"/>
 						</div>
 						<button onClick={this.enterRoom} className="btn btn-primary">Enter Room</button>
+						<button onClick={this.createAnonymousNameForRoom} className="btn btn-primary">Enter Anonymously</button>
 					</form>
 				</div>
 			);
