@@ -7,6 +7,8 @@ var Route = Router.Route;
 var DefaultRoute = Router.DefaultRoute;
 var NotFoundRoute = Router.NotFoundRoute;
 
+//React.initializeTouchEvents(true);
+
 var routes = (
 	<Route handler={PlanningPoker}>
 		<DefaultRoute handler={Index}/>

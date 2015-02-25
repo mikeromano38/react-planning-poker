@@ -95,7 +95,7 @@ var RoomListItem = React.createClass({
 		return (
 			<tr>
 				<td>
-					<a onClick={this.goToRoom}><span>{this.props.room.name}</span></a>
+					<a onClick={this.goToRoom}>{this.props.room.name}</a>
 				</td>
 				<td>
 					<span>{this.props.room.values}</span>
