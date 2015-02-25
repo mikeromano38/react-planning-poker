@@ -11,7 +11,13 @@ var surnamePrefixes = [
 	'Mac',
 	'De',
 	'Di',
-	'O\''
+	'O\'',
+	'Bin',
+	'Da',
+	'El',
+	'Fitz',
+	'Le\'',
+	'Kil'
 ];
 
 var getRandSurnamePrefix = function(){

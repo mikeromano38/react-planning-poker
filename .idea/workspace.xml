@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c1956532-8629-467a-9b77-f2d2f14bd821" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/app-bundled.js" afterPath="$PROJECT_DIR$/public/javascripts/app-bundled.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/utils/name-generator.js" afterPath="$PROJECT_DIR$/public/javascripts/utils/name-generator.js" />
     </list>
     <ignored path="planning-poker.iws" />
@@ -50,8 +49,8 @@
       <file leaf-file-name="name-generator.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/javascripts/utils/name-generator.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5368171" vertical-offset="854" max-vertical-offset="1350">
-              <caret line="72" column="57" selection-start-line="72" selection-start-column="57" selection-end-line="72" selection-end-column="57" />
+            <state vertical-scroll-proportion="0.4631829" vertical-offset="0" max-vertical-offset="1440">
+              <caret line="13" column="10" selection-start-line="13" selection-start-column="10" selection-end-line="13" selection-end-column="10" />
               <folding />
             </state>
           </provider>
@@ -215,7 +214,8 @@
     </gulpfiles>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="y" value="22" />
+    <option name="x" value="1998" />
+    <option name="y" value="377" />
     <option name="width" value="1440" />
     <option name="height" value="874" />
   </component>
@@ -512,7 +512,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1440" height="874" extended-state="6" />
+    <frame x="1998" y="377" width="1440" height="874" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21423538" sideWeight="0.31385282" order="2" side_tool="true" content_ui="tabs" />
@@ -965,8 +965,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/javascripts/utils/name-generator.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5368171" vertical-offset="854" max-vertical-offset="1350">
-          <caret line="72" column="57" selection-start-line="72" selection-start-column="57" selection-end-line="72" selection-end-column="57" />
+        <state vertical-scroll-proportion="0.4631829" vertical-offset="0" max-vertical-offset="1440">
+          <caret line="13" column="10" selection-start-line="13" selection-start-column="10" selection-end-line="13" selection-end-column="10" />
           <folding />
         </state>
       </provider>
