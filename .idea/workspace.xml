@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c1956532-8629-467a-9b77-f2d2f14bd821" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/app-bundled.js" afterPath="$PROJECT_DIR$/public/javascripts/app-bundled.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/app.jsx" afterPath="$PROJECT_DIR$/public/javascripts/app.jsx" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/components/room.jsx" afterPath="$PROJECT_DIR$/public/javascripts/components/room.jsx" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/components/rooms-list.jsx" afterPath="$PROJECT_DIR$/public/javascripts/components/rooms-list.jsx" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="planning-poker.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -89,11 +88,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="room.jsx" pinned="false" current-in-tab="false">
+      <file leaf-file-name="room.jsx" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/javascripts/components/room.jsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="67" max-vertical-offset="3390">
-              <caret line="27" column="23" selection-start-line="27" selection-start-column="23" selection-end-line="27" selection-end-column="23" />
+            <state vertical-scroll-proportion="0.4402985" vertical-offset="2437" max-vertical-offset="3390">
+              <caret line="190" column="112" selection-start-line="190" selection-start-column="112" selection-end-line="190" selection-end-column="112" />
               <folding />
             </state>
           </provider>
@@ -103,17 +102,17 @@
         <entry file="file://$PROJECT_DIR$/public/javascripts/components/rooms-list.jsx">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0" vertical-offset="1027" max-vertical-offset="1965">
-              <caret line="97" column="46" selection-start-line="97" selection-start-column="46" selection-end-line="97" selection-end-column="46" />
+              <caret line="84" column="6" selection-start-line="84" selection-start-column="6" selection-end-line="84" selection-end-column="6" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="app.jsx" pinned="false" current-in-tab="true">
+      <file leaf-file-name="app.jsx" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/javascripts/app.jsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.15991472" vertical-offset="0" max-vertical-offset="938">
-              <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="480">
+              <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -185,9 +184,9 @@
         <option value="$PROJECT_DIR$/public/stylesheets/card-flip.scss" />
         <option value="$PROJECT_DIR$/public/javascripts/stores/rooms-store.js" />
         <option value="$PROJECT_DIR$/public/javascripts/components/cards.jsx" />
-        <option value="$PROJECT_DIR$/public/javascripts/components/room.jsx" />
-        <option value="$PROJECT_DIR$/public/javascripts/components/rooms-list.jsx" />
         <option value="$PROJECT_DIR$/public/javascripts/app.jsx" />
+        <option value="$PROJECT_DIR$/public/javascripts/components/rooms-list.jsx" />
+        <option value="$PROJECT_DIR$/public/javascripts/components/room.jsx" />
       </list>
     </option>
   </component>
@@ -946,10 +945,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/components/room.jsx">
+    <entry file="file://$PROJECT_DIR$/public/javascripts/app.jsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="67" max-vertical-offset="3390">
-          <caret line="27" column="23" selection-start-line="27" selection-start-column="23" selection-end-line="27" selection-end-column="23" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="480">
+          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -957,15 +956,15 @@
     <entry file="file://$PROJECT_DIR$/public/javascripts/components/rooms-list.jsx">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1027" max-vertical-offset="1965">
-          <caret line="97" column="46" selection-start-line="97" selection-start-column="46" selection-end-line="97" selection-end-column="46" />
+          <caret line="84" column="6" selection-start-line="84" selection-start-column="6" selection-end-line="84" selection-end-column="6" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/app.jsx">
+    <entry file="file://$PROJECT_DIR$/public/javascripts/components/room.jsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.15991472" vertical-offset="0" max-vertical-offset="938">
-          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.4402985" vertical-offset="2437" max-vertical-offset="3390">
+          <caret line="190" column="112" selection-start-line="190" selection-start-column="112" selection-end-line="190" selection-end-column="112" />
           <folding />
         </state>
       </provider>

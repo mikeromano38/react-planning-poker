@@ -188,7 +188,7 @@ var Room = React.createClass({
 			view = (
 				<div className="col-sm-12">
 					<h3>Welcome { currentUser.name }!</h3>
-					<h4 className="room-heading"><a onClick={this.navigateHome}>Back to home</a> | Welcome to Room { this.state.room.name }</h4>
+					<h4 className="room-heading"><a onClick={this.navigateHome} onTouchStart={this.navigateHome}>Back to home</a> | Welcome to Room { this.state.room.name }</h4>
 					<PokerHand cardsRevealed={this.state.room.revealCards && votes.length} />
 					{revealBtn}
 					<button onClick={this.resetCards} className="btn btn-primary">Reset Cards</button>
@@ -199,7 +199,7 @@ var Room = React.createClass({
 		} else {
 			view = (
 				<div className="col-sm-12">
-					<h4 className="room-heading"><a onClick={this.navigateHome}>Back to home</a> | Welcome to Room { this.state.room.name }</h4>
+					<h4 className="room-heading"><a onClick={this.navigateHome} onTouchStart={this.navigateHome}>Back to home</a> | Welcome to Room { this.state.room.name }</h4>
 					<form className="form-inline">
 						<div className="form-group">
 							<label for="user-name">Username:</label>
