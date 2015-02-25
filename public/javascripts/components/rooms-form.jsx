@@ -38,13 +38,13 @@ var RoomsForm = React.createClass({
 	render: function(){
 
 		return (
-			<div className="col-sm-6">
+			<div className="col-sm-12">
 				<form onSubmit={this.handleSubmit} className="form-inline">
 					<div className="form-group">
-						<label>Room Name</label><input className="form-control" type="text" value={this.state.name} placeholder="Enter New Room Name" name="room-name" onChange={this.handleChangeName} />
+						<label>Room Name</label><input className="form-control" type="text" value={this.state.name} placeholder="Room Name" name="room-name" onChange={this.handleChangeName} />
 					</div>
 					<div className="form-group">
-						<label>Values</label><input className="form-control" type="text" value={this.state.values} placeholder="Enter value options" name="room-name" onChange={this.handleChangeValues} />
+						<label>Values</label><input className="form-control" type="text" value={this.state.values} placeholder="ex: 1,2,3,5,8,13" name="room-name" onChange={this.handleChangeValues} />
 					</div>
 					<button className="btn btn-primary" type="submit" >Create</button>
 				</form>

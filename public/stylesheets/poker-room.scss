@@ -9,14 +9,13 @@
   line-height: 80px;
   vertical-align: middle;
   display: inline-block;
-  border: 1px solid black;
-  border-radius: 5px;
+  border: 1px solid #666;
   text-align: center;
 
   .front {
     background: blue;
     color: white;
-    font-size: 40px;
+    font-size: 24px;
   }
 
   .back {
@@ -26,14 +25,25 @@
   }
 }
 
-@include animation(all .5s ease-in-out);
+.room-heading, .poker-hand {
+  margin-bottom: 40px;
+}
 
 .poker-hand {
   list-style-type: none;
+  padding: 0;
 }
 
 .poker-hand li {
   display: inline-block;
+
+  .glyphicon {
+    color: green;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 1000;
+  }
 }
 
 .room-user-list {
@@ -46,20 +56,22 @@
 }
 
 .room-user-list li {
+  display: inline-block;
   clear: both;
-  width: 300px;
   padding: 10px;
-  height: 100px;
-  line-height: 100px;
   vertical-align: middle;
-}
 
-.room-user-list li:hover {
-  background-color: #add1f6;
-}
+  .glyphicon {
+    position: inherit;
+  }
 
-.room-user-list .planning-card {
-  float: right;
+  &.user-selected {
+    .planning-card {
+      .front {
+        background: green;
+      }
+    }
+  }
 }
 
 .card-wrapper .selected-indicator {

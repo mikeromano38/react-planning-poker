@@ -51,9 +51,8 @@ var RoomsList = React.createClass({
 		}
 
 		return (
-			<div className="col-sm-6">
-				<h4>Active Rooms</h4>
-
+			<div className="col-sm-12">
+				<h4>&nbsp;</h4>
 				<table className="table">
 					<thead>
 						<tr>

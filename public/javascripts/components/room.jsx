@@ -67,9 +67,14 @@ var RoomUserList = React.createClass({
 		return (
 			<ul className="room-user-list">
 				{users.map(function( user ){
-					var displayValue = (user.selected && self.props.revealCards) ? user.selected : (user.selected) ? "*" : "?";
+					var flipped = self.props.revealed && user.selected;
+					var displayValue = user.selected;
+					var className = ( user.selected ) ? 'user-selected' : '';
 
-					return <li key={user.key}>{user.name} <Card flipped={self.props.revealed} value={displayValue} /></li>
+					var backClass = ( user.selected ) ? 'glyphicon glyphicon-ok-sign' : 'glyphicon glyphicon-question-sign';
+					var back = <span className={backClass}></span>;
+
+					return <li key={user.key} className={className}> <span>{user.name}</span> <Card flipped={flipped} back={back} value={displayValue} /></li>
 				})}
 			</ul>
 		);
@@ -176,8 +181,8 @@ var Room = React.createClass({
 			}
 
 			view = (
-				<div>
-					<h4><a onClick={this.navigateHome}>Back to home</a> | Welcome to Room { this.state.room.name }</h4>
+				<div className="col-sm-12">
+					<h4 className="room-heading"><a onClick={this.navigateHome}>Back to home</a> | Welcome to Room { this.state.room.name }</h4>
 					<PokerHand cardsRevealed={this.state.room.revealCards} />
 					{revealBtn}
 					<button onClick={this.resetCards} disabled={!votes.length} className="btn btn-primary">Reset Cards</button>
@@ -187,12 +192,12 @@ var Room = React.createClass({
 			);
 		} else {
 			view = (
-				<div>
-					<h4><a onClick={this.navigateHome}>Back to home</a> | Welcome to Room { this.state.room.name }</h4>
+				<div className="col-sm-12">
+					<h4 className="room-heading"><a onClick={this.navigateHome}>Back to home</a> | Welcome to Room { this.state.room.name }</h4>
 					<form className="form-inline">
 						<div className="form-group">
-							<label for="user-name">User Name:</label>
-							<input onChange={this.handleUserNameKeyup} className="form-control" name="user-name" value={this.state.user.name} placeholder="Enter Your User Name"/>
+							<label for="user-name">Username:</label>
+							<input onChange={this.handleUserNameKeyup} className="form-control" name="user-name" value={this.state.user.name} placeholder="ex. BieberFever808"/>
 						</div>
 						<button onClick={this.enterRoom} className="btn btn-primary">Enter Room</button>
 					</form>
