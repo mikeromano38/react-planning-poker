@@ -57,20 +57,20 @@ Generator.generate = function(){
 	var lastNameFirstPart = requestWord({
 		type: 'adjective',
 		minLength: 3,
-		maxLength: 8
+		maxLength: 5
 	});
 
 	var lastNameLastPart = requestWord({
 		type: 'noun',
 		minLength: 5,
-		maxLength: 10
+		maxLength: 8
 	});
 
 	Q.all([ firstName, lastNameFirstPart, lastNameLastPart ]).then(function( responses ){
 		var name =	capitalize( responses[ 0 ].body.word ) + ' ' +
 					getRandSurnamePrefix() +
 					capitalize( responses[ 1 ].body.word ) +
-					responses[ 2 ].body.word;
+					responses[ 2 ].body.word.toLowerCase();
 
 		RoomsActions.nameGeneratedSuccessfully( name );
 	}, function( err ){
