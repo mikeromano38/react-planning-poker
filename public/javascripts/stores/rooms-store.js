@@ -109,8 +109,17 @@ var addUserToRoom = function( user, roomKey ){
 	 */
 	roomRef.once('value', function( snapshot ){
 		var val = snapshot.val();
+		var oneSelected = false;
 
-		if ( val && ( !val.participants || !Object.keys( val.participants ).length ) && val.revealCards ){
+		if ( val.participants ){
+			for ( var part in val.participants ){
+				if ( val.participants[ part ].selected ){
+					oneSelected = true;
+				}
+			}
+		}
+
+		if ( !oneSelected || ( val && ( !val.participants || !Object.keys( val.participants ).length ) && val.revealCards ) ){
 			roomRef.update({ revealCards: false });
 		}
 	});

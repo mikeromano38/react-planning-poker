@@ -17,18 +17,18 @@
 #f1_card {
   width: 100%;
   height: 100%;
-  transform-style: preserve-3d;
-  transition: all .3s linear;
+  @include transform-style(preserve-3d);
+  @include transition(all .3s linear);
 }
 #f1_container.flipped #f1_card {
   @include transform(rotateY(180deg));
-  box-shadow: 0 0 5px rgba(0,0,0,.3);
+  @include prefixer(box-shadow, 0 0 5px rgba(0,0,0,.3), webkit moz spec);
 }
 .face {
   position: absolute;
   width: 100%;
   height: 100%;
-  backface-visibility: hidden;
+  @include backface-visibility(hidden);
 }
 #f1_container.flipped.selected {
   z-index: 999;
@@ -39,8 +39,8 @@
 }
 .face.back {
   display: block;
-  transform: rotateY(180deg);
-  box-sizing: border-box;
+  @include transform(rotateY(180deg));
+  @include box-sizing(border-box);
   color: white;
   text-align: center;
   background-color: #aaa;

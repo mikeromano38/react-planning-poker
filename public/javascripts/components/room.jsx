@@ -176,9 +176,9 @@ var Room = React.createClass({
 
 
 			if ( !this.state.room.revealCards ){
-				revealBtn = <button disabled={!votes.length} onClick={this.revealCards} className="btn btn-primary">Reveal Cards</button>
+				revealBtn = <button onClick={this.revealCards} className="btn btn-primary">Reveal Cards</button>
 			} else  {
-				revealBtn = <button disabled={!votes.length} onClick={this.hideCards} className="btn btn-primary">Hide Cards</button>
+				revealBtn = <button onClick={this.hideCards} className="btn btn-primary">Hide Cards</button>
 			}
 
 			if ( this.state.room.revealCards && votes.length ){
@@ -189,9 +189,9 @@ var Room = React.createClass({
 				<div className="col-sm-12">
 					<h3>Welcome { currentUser.name }!</h3>
 					<h4 className="room-heading"><a onClick={this.navigateHome}>Back to home</a> | Welcome to Room { this.state.room.name }</h4>
-					<PokerHand cardsRevealed={this.state.room.revealCards} />
+					<PokerHand cardsRevealed={this.state.room.revealCards && votes.length} />
 					{revealBtn}
-					<button onClick={this.resetCards} disabled={!votes.length} className="btn btn-primary">Reset Cards</button>
+					<button onClick={this.resetCards} className="btn btn-primary">Reset Cards</button>
 					<RoomUserList revealed={this.state.room.revealCards} users={this.state.room.participants} revealCards={this.state.room.revealCards}/>
 					{results}
 				</div>

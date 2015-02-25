@@ -30,6 +30,7 @@ var PokerHand = React.createClass({
 	},
 
 	selectCard: function( val ){
+		debugger
 		if ( this.props.cardsRevealed ){
 			return;
 		}
@@ -63,7 +64,7 @@ var PokerHand = React.createClass({
 var Card = React.createClass({
 	render: function(){
 
-		var className = ''
+		var className = '';
 		className = className + ( ( this.props.flipped ) ? ' flipped' : '' );
 		className = className + ( ( this.props.selected ) ? ' selected' : '' );
 
