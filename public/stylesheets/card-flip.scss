@@ -12,7 +12,7 @@
   }
 }
 #f1_container {
-  perspective: 1000;
+  @include perspective(1000px);
 }
 #f1_card {
   width: 100%;
@@ -21,7 +21,7 @@
   @include transition(all .3s linear);
 }
 #f1_container.flipped #f1_card {
-  @include transform(rotateY(180deg));
+  @include transform(scale(1.1) rotateY(180deg));
   @include prefixer(box-shadow, 0 0 5px rgba(0,0,0,.3), webkit moz spec);
 }
 .face {

@@ -74,6 +74,11 @@
   }
 }
 
+.poker-hand {
+  position: relative;
+  z-index: 1;
+}
+
 .card-wrapper .selected-indicator {
   position: absolute;
   left: 0;
