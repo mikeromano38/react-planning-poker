@@ -68,6 +68,21 @@ var Card = React.createClass({
 		className = className + ( ( this.props.flipped ) ? ' flipped' : '' );
 		className = className + ( ( this.props.selected ) ? ' selected' : '' );
 
+		var fontSize;
+		var valLength = ( this.props.value ) ? this.props.value.length : 0;
+
+		if ( valLength <= 4 ){
+			fontSize = 24;
+		} else if ( valLength > 4 && valLength < 8 ){
+			fontSize = 14;
+		} else {
+			fontSize = 12;
+		}
+
+		var valueStyle = {
+			fontSize: fontSize + 'px'
+		};
+
 		return (
 			<div id="f1_container" className={className}>
 				<div id="f1_card" className="shadow planning-card">
@@ -75,7 +90,7 @@ var Card = React.createClass({
 						<div>{this.props.back}</div>
 					</div>
 					<div className="back face center">
-						<p>{this.props.value}</p>
+						<p style={valueStyle}>{this.props.value}</p>
 					</div>
 				</div>
 			</div>
