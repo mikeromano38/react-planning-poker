@@ -58,8 +58,22 @@
 .room-user-list li {
   display: inline-block;
   clear: both;
-  padding: 10px;
+  width: 130px;
+  margin-right: 10px;
+  margin-bottom: 10px;
   vertical-align: middle;
+
+  .username {
+    display: inline-block;
+    overflow: hidden;
+    width: 100%;
+    margin-bottom: -5px;
+    text-overflow: ellipsis;
+  }
+
+  #f1_container {
+    margin-top: 10px;
+  }
 
   .glyphicon {
     position: inherit;
@@ -77,6 +91,10 @@
 .poker-hand {
   position: relative;
   z-index: 1;
+}
+
+.card-wrapper {
+  margin-bottom: 10px;
 }
 
 .card-wrapper .selected-indicator {

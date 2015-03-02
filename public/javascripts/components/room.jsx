@@ -4,6 +4,7 @@ var Router = require('react-router');
 var RoomsActions = require('../actions/rooms-actions');
 var Card = require('./cards.jsx').Card;
 var PokerHand = require('./cards.jsx').PokerHand;
+var Spinner = require('./spinner');
 
 var EstimationResults = React.createClass({
 
@@ -67,6 +68,17 @@ var RoomUserList = React.createClass({
 		return (
 			<ul className="room-user-list">
 				{users.map(function( user ){
+
+					var splitName = user.name.trim().split(' ');
+
+					splitName = splitName.filter(function( part ){
+						return part.trim();
+					});
+
+					splitName = splitName.map(function( part ){
+						return <span className="username">{part}</span>;
+					});
+
 					var flipped = self.props.revealed && user.selected;
 					var displayValue = user.selected;
 					var className = ( user.selected ) ? 'user-selected' : '';
@@ -74,7 +86,7 @@ var RoomUserList = React.createClass({
 					var backClass = ( user.selected ) ? 'glyphicon glyphicon-ok-sign' : 'glyphicon glyphicon-question-sign';
 					var back = <span className={backClass}></span>;
 
-					return <li key={user.key} className={className}> <span>{user.name}</span> <Card flipped={flipped} back={back} value={displayValue} /></li>
+					return <li key={user.key} className={className}> {splitName} <Card flipped={flipped} back={back} value={displayValue} /></li>
 				})}
 			</ul>
 		);
@@ -112,7 +124,7 @@ var Room = React.createClass({
 		var state = {
 			room: RoomsStore.getRoom( this.getParams().id ),
 			user : {
-				name: this.state.user.name,
+				name: ( RoomsStore.getRandomName() ) ? RoomsStore.getRandomName() : this.state.user.name,
 				selected: this.state.user.selected
 			}
 		};
@@ -159,11 +171,14 @@ var Room = React.createClass({
 	createAnonymousNameForRoom: function( evt ){
 		evt.preventDefault();
 		RoomsActions.createAnonymousNameForRoom( this.getParams().id );
+		this.forceUpdate();
 	},
 
 	render: function(){
 		var view;
 		var currentUser = RoomsStore.getCurrentUser();
+		var nameGenerationContents = ( RoomsStore.nameIsGenerating() ) ? <span>Generating...</span> :
+			( RoomsStore.getRandomName() ) ? <span>Generate Another</span> : <span>Generate Anonymous Name</span>;
 
 		if ( currentUser ){
 
@@ -200,13 +215,13 @@ var Room = React.createClass({
 			view = (
 				<div className="col-sm-12">
 					<h4 className="room-heading"><a onClick={this.navigateHome} onTouchStart={this.navigateHome}>Back to home</a> | Welcome to Room { this.state.room.name }</h4>
-					<form className="form-inline">
+					<form lassName="col-sm-12 col-med-6">
 						<div className="form-group">
 							<label for="user-name">Username:</label>
 							<input onChange={this.handleUserNameKeyup} className="form-control" name="user-name" value={this.state.user.name} placeholder="ex. BieberFever808"/>
 						</div>
 						<button onClick={this.enterRoom} className="btn btn-primary">Enter Room</button>
-						<button onClick={this.createAnonymousNameForRoom} className="btn btn-primary">Enter Anonymously</button>
+						<button onClick={this.createAnonymousNameForRoom} className="btn btn-primary">{nameGenerationContents}</button>
 					</form>
 				</div>
 			);

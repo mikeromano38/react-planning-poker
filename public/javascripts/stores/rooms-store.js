@@ -6,9 +6,10 @@ var NameGenerator = require('../utils/name-generator');
 
 var _rooms = [];
 var _loaded = false;
+var _randomName = null;
 var _currentUser = null;
-var _currentRoomKey = null;
 var _currentUserRef = null;
+var _nameIsGenerating = false;
 
 var roomsRef = firebaseConnection.child('/rooms');
 
@@ -124,6 +125,8 @@ var addUserToRoom = function( user, roomKey ){
 		}
 	});
 
+
+	setRandomName( null );
 	_currentUserRef = participantsRef.push( user );
 	_currentUserRef.onDisconnect().remove();
 
@@ -148,16 +151,19 @@ var removeCurrentUser = function(){
 	_currentUser = null;
 };
 
-var generateRandomNameForRoom = function( roomKey ) {
-	_currentRoomKey = roomKey;
+var generateRandomNameForRoom = function() {
+	_nameIsGenerating = true;
 	NameGenerator.generate();
 };
 
-var setNameAndEnterRoom = function( name ){
-	if ( _currentRoomKey ){
-		addUserToRoom({ name: name }, _currentRoomKey );
-		_currentRoomKey = null;
-	}
+var getRandomName = function(){
+	return _randomName;
+};
+
+var setRandomName = function( name ){
+	_randomName = name;
+	_nameIsGenerating = false;
+	RoomsStore.emit('change');
 };
 
 var displayError = function( err ){
@@ -170,9 +176,15 @@ var RoomsStore = merge( EventEmitter.prototype, {
 		return _loaded;
 	},
 
+	nameIsGenerating: function(){
+		return _nameIsGenerating;
+	},
+
 	getAllRooms: function(){
 		return _rooms;
 	},
+
+	getRandomName: getRandomName,
 
 	getRoom: function( roomKey ){
 		for( var i = 0, l = _rooms.length; i < l; i++ ){
@@ -226,7 +238,7 @@ var RoomsStore = merge( EventEmitter.prototype, {
 				generateRandomNameForRoom( payload.roomKey );
 				break;
 			case 'name-generated-successfully':
-				setNameAndEnterRoom( payload.name );
+				setRandomName( payload.name );
 				break;
 			case 'name-generation-failure':
 				displayError( payload.err );
