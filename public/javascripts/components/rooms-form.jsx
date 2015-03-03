@@ -1,6 +1,7 @@
 var RoomsActions = require('../actions/rooms-actions');
 var React = require('react');
 var Router = require('react-router');
+var MyModal = require('./modal.jsx');
 
 var RoomsForm = React.createClass({
 
@@ -36,7 +37,6 @@ var RoomsForm = React.createClass({
 	},
 
 	render: function(){
-
 		return (
 			<div className="col-sm-12">
 				<form onSubmit={this.handleSubmit} className="form-inline">

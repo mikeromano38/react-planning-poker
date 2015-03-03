@@ -4,7 +4,7 @@ var Router = require('react-router');
 var RoomsActions = require('../actions/rooms-actions');
 var Card = require('./cards.jsx').Card;
 var PokerHand = require('./cards.jsx').PokerHand;
-var Spinner = require('./spinner');
+var Modal = require('./modal.jsx');
 
 var EstimationResults = React.createClass({
 
@@ -32,15 +32,23 @@ var EstimationResults = React.createClass({
 	},
 
 	render: function(){
+		var self = this;
 
 		var results = this.state.options.map(function( option ){
+
+			var modes = self.state.options.modes.filter(function( mode ){
+				return mode.val === option.val;
+			});
+
+			var className = ( modes.length ) ? 'mode' : '';
+
 			return (
-				<tr><td>{option.val}</td><td>{option.numVotes}</td></tr>
+				<tr className={className}><td>{option.val}</td><td>{option.numVotes}</td></tr>
 			);
 		});
 
 		return (
-			<table className="table">
+			<table className="table results-table">
 				<thead>
 					<tr>
 						<th>Value</th>
@@ -152,6 +160,7 @@ var Room = React.createClass({
 	},
 
 	revealCards: function(){
+		this.state.modalOpen = true;
 		RoomsActions.revealCardsForRoom( true, this.getParams().id );
 	},
 
@@ -174,21 +183,24 @@ var Room = React.createClass({
 		this.forceUpdate();
 	},
 
+	hideModal: function(){
+		this.state.modalOpen = false;
+		this.forceUpdate();
+	},
+
 	render: function(){
 		var view;
 		var currentUser = RoomsStore.getCurrentUser();
 		var nameGenerationContents = ( RoomsStore.nameIsGenerating() ) ? <span>Generating...</span> :
 			( RoomsStore.getRandomName() ) ? <span>Generate Another</span> : <span>Generate Anonymous Name</span>;
 
+
 		if ( currentUser ){
 
 			var revealBtn;
+			var modal = '';
 			var results;
-
-			var votes = RoomsStore.getEstimationResultsForRoom( this.getParams().id ).filter(function( result ){
-				return result.numVotes > 0;
-			});
-
+			var resultsModel = RoomsStore.getEstimationResultsForRoom( this.getParams().id );
 
 			if ( !this.state.room.revealCards ){
 				revealBtn = <button onClick={this.revealCards} className="btn btn-primary">Reveal Cards</button>
@@ -196,15 +208,33 @@ var Room = React.createClass({
 				revealBtn = <button onClick={this.hideCards} className="btn btn-primary">Hide Cards</button>
 			}
 
-			if ( this.state.room.revealCards && votes.length ){
-				results = <EstimationResults />;
+			if ( this.state.room.revealCards && resultsModel.votes.length ){
+
+				if ( !resultsModel.mode || !this.state.modalOpen || Number( resultsModel.mode.val ) <= 3 || !RoomsStore.easterEggsEnabled() ){
+					results = <EstimationResults />;
+				}
+
+				if ( resultsModel.mode && Number( resultsModel.mode.val ) > 3 && this.state.modalOpen && RoomsStore.easterEggsEnabled() ){
+					var content = (
+						<div>
+							<h4>Would you like to consider a lower estimation value? Perhaps a 3?</h4>
+							{<EstimationResults />}
+							<img src="/images/milan.png" />
+						</div>
+					);
+
+					modal = (
+						<Modal title="Team, estimation too high!" content={content} onRequestHide={this.hideModal}></Modal>
+					)
+				}
 			}
 
 			view = (
 				<div className="col-sm-12">
+					{modal}
 					<h3>Welcome { currentUser.name }!</h3>
 					<h4 className="room-heading"><a onClick={this.navigateHome} onTouchStart={this.navigateHome}>Back to home</a> | Welcome to Room { this.state.room.name }</h4>
-					<PokerHand cardsRevealed={this.state.room.revealCards && votes.length} />
+					<PokerHand cardsRevealed={this.state.room.revealCards && resultsModel.votes.length} />
 					{revealBtn}
 					<button onClick={this.resetCards} className="btn btn-primary">Reset Cards</button>
 					<RoomUserList revealed={this.state.room.revealCards} users={this.state.room.participants} revealCards={this.state.room.revealCards}/>

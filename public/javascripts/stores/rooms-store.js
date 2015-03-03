@@ -5,6 +5,7 @@ var firebaseConnection  = require('../firebaseConnection');
 var NameGenerator = require('../utils/name-generator');
 
 var _rooms = [];
+var _easterEggsEnabled = false;
 var _loaded = false;
 var _randomName = null;
 var _currentUser = null;
@@ -21,6 +22,12 @@ roomsRef.on('value', function( snapshot ){
 	updateRooms( roomList );
 	RoomsStore.emit('change');
 
+});
+
+var easterEggConnection = firebaseConnection.child('/easter-eggs-enabled');
+
+easterEggConnection.on('value', function( snapshot ){
+	_easterEggsEnabled = snapshot.val();
 });
 
 var updateRooms = function( newRooms ){
@@ -69,6 +76,7 @@ var getEstimationResultsForRoom = function( roomKey ){
 	var participants;
 	var participant;
 	var results = [];
+	var modes = [];
 
 	var room = _rooms.filter(function( room ){
 		return room.key === roomKey;
@@ -92,6 +100,46 @@ var getEstimationResultsForRoom = function( roomKey ){
 			}
 		}
 	}
+
+	var votes = results.filter(function( result ){
+		assignMode( result, modes );
+		return result.numVotes > 0;
+	});
+
+	var numeric = true;
+
+	results.forEach(function( result ){
+		if ( isNaN( Number( result.val ) ) ){
+			numeric = false;
+		}
+	});
+
+	var mode = modes.reduce(function( last, current ){
+		if ( Number( current.val ) > Number( last.val ) ){
+			return current;
+		} else {
+			return last;
+		}
+	});
+
+	function assignMode( result, modes ){
+		if ( !modes.length ) {
+			return modes.push( result );
+		} else {
+			modes.forEach(function( mode ){
+				if ( result.numVotes > mode.numVotes ){
+					modes.length = 0;
+					modes.push( result );
+				} else if ( result.numVotes === mode.numVotes ) {
+					modes.push( result );
+				}
+			});
+		}
+	}
+
+	results.mode = ( numeric ) ? mode : null;
+	results.modes = modes;
+	results.votes = votes;
 
 	return results;
 };
@@ -171,6 +219,10 @@ var displayError = function( err ){
 };
 
 var RoomsStore = merge( EventEmitter.prototype, {
+
+	easterEggsEnabled: function(){
+		return _easterEggsEnabled;
+	},
 
 	isLoaded: function(){
 		return _loaded;

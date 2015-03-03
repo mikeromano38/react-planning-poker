@@ -30,7 +30,6 @@ var PokerHand = React.createClass({
 	},
 
 	selectCard: function( val ){
-		debugger
 		if ( this.props.cardsRevealed ){
 			return;
 		}
